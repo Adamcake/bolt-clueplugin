@@ -1,0 +1,3 @@
+[submodule "layers_rs3"]
+	path = layers_rs3
+	url = https://github.com/mejrs/layers_rs3.git
