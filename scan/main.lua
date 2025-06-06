@@ -51,7 +51,7 @@ return {get = function(bolt)
   }
 
   local function create (bolt, location)
-    pointlist, scanrange = points.get(location)
+    local pointlist, scanrange = points.get(location)
     if meerkats then
       scanrange = scanrange + 5
     end
@@ -172,7 +172,7 @@ return {get = function(bolt)
               this.surfacemaybeloading:drawtoscreen(0, 0, maybewidth, maybeheight, px - imgradius, py - imgradius, imgsize, imgsize)
             else
               -- normal non-eliminated point
-              scale = 0.75
+              local scale = 0.75
               local imgradius = 16 * scale
               local imgsize = 32 * scale
               surfacemaybe:drawtoscreen(0, 0, maybewidth, maybeheight, px - imgradius, py - imgradius, imgsize, imgsize)
