@@ -43,12 +43,11 @@ return {get = function(bolt)
             chunks[chunkname] = chunk
           else
             map.pendingredraw = true
-            goto c1
           end
         else
           chunk.lastused = t
         end
-        if chunk.image ~= nil then
+        if chunk ~= nil and chunk.image ~= nil then
           local tilediffx = (x * chunksize) - map.x
           local tilediffy = map.y - ((y + 1) * chunksize)
           local drawx = (map.w / 2) + (tilediffx * viewscale)
@@ -57,7 +56,6 @@ return {get = function(bolt)
         end
       end
     end
-    ::c1::
     local fullheight = map.h + titleheight
     whitepixel:settint(0.025, 0.025, 0.025)
     whitepixel:drawtowindow(window, 0, 0, 1, 1, 0, 0, borderwidth, fullheight)
