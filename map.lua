@@ -11,21 +11,16 @@ return {get = function(bolt)
   local viewscaleindex = 11
   local viewscalecount = #viewscales
 
-  local maxchunks = 50 -- soft cap on the number of chunks which can be loaded at one time
+  local maxchunks = 256 -- soft cap on the number of chunks which can be loaded at one time
   local activechunkage = 1000000 -- how old a chunk has to be to be eligible for unloading, in microseconds (= 1 second)
-
-  local setxy = function (map, x, y)
-    map.x = x
-    map.y = y
-    map:redraw()
-  end
+  local maxloadperframe = 20000 -- cap on how long can be spent loading images per frame, in microseconds (= 0.02 seconds)
 
   local redraw = function (map)
     local window = map.window
     local level = map.level
     local viewscale = viewscales[viewscaleindex]
     local t = bolt.time()
-    window:clear(1, 1, 1, 1)
+    window:clear(0, 0, 0, 1)
     local tilehalfwidth = (map.w / (2 * viewscale))
     local tilehalfheight = (map.h / (2 * viewscale))
     local gx1 = map.x - tilehalfwidth
@@ -41,20 +36,28 @@ return {get = function(bolt)
       for x = chunkx1, chunkx2 do
         local chunkname = string.format("%d_%d_%d", level, x, y)
         local chunk = chunks[chunkname]
-        if not chunk then
-          local image, w, h = bolt.createsurfacefrompng(string.format("layers_rs3.map_squares.-1.2.%s", chunkname))
-          chunk = { image = image, w = w, h = h, lastused = t }
-          chunks[chunkname] = chunk
+        if chunk == nil then
+          if t + maxloadperframe > bolt.time() then
+            local image, w, h = bolt.createsurfacefrompng(string.format("layers_rs3.map_squares.-1.2.%s", chunkname))
+            chunk = { image = image, w = w, h = h, lastused = t }
+            chunks[chunkname] = chunk
+          else
+            map.pendingredraw = true
+            goto c1
+          end
         else
           chunk.lastused = t
         end
-        local tilediffx = (x * chunksize) - map.x
-        local tilediffy = map.y - ((y + 1) * chunksize)
-        local drawx = (map.w / 2) + (tilediffx * viewscale)
-        local drawy = (map.h / 2) + (tilediffy * viewscale) + titleheight
-        chunk.image:drawtowindow(window, 0, 0, chunk.w, chunk.h, drawx, drawy, drawsize, drawsize)
+        if chunk.image ~= nil then
+          local tilediffx = (x * chunksize) - map.x
+          local tilediffy = map.y - ((y + 1) * chunksize)
+          local drawx = (map.w / 2) + (tilediffx * viewscale)
+          local drawy = (map.h / 2) + (tilediffy * viewscale) + titleheight
+          chunk.image:drawtowindow(window, 0, 0, chunk.w, chunk.h, drawx, drawy, drawsize, drawsize)
+        end
       end
     end
+    ::c1::
     local fullheight = map.h + titleheight
     whitepixel:settint(0.025, 0.025, 0.025)
     whitepixel:drawtowindow(window, 0, 0, 1, 1, 0, 0, borderwidth, fullheight)
@@ -64,7 +67,9 @@ return {get = function(bolt)
     whitepixel:drawtowindow(window, 0, 0, 1, 1, 0, 0, map.w, titleheight)
 
     -- gc
-    if #chunks > maxchunks then
+    local chunkcount = 0
+    for _ in pairs(chunks) do chunkcount = chunkcount + 1 end
+    if chunkcount > maxchunks then
       local removals = {}
       local i = 1
       for name, chunk in pairs(chunks) do
@@ -79,10 +84,17 @@ return {get = function(bolt)
     end
   end
 
+  local onswapbuffers = function (map)
+    if map.pendingredraw then
+      map.pendingredraw = false
+      map:redraw()
+    end
+  end
+
   return {
     create = function (x, y, level)
       local window = bolt.createwindow(10, 10, mapdefaultsize, mapdefaultsize + titleheight)
-      local map = { x = x, y = y, level = level, w = mapdefaultsize, h = mapdefaultsize, window = window, setxy = setxy, redraw = redraw }
+      local map = { x = x, y = y, level = level, w = mapdefaultsize, h = mapdefaultsize, window = window, pendingredraw = false, redraw = redraw, onswapbuffers = onswapbuffers }
       local clickpixelx = 0
       local clickpixely = 0
       local clickmapx = 0
@@ -99,7 +111,7 @@ return {get = function(bolt)
           end
           local isleftedge = ex < borderwidth
           local isrightedge = ex >= map.w - borderwidth
-          local isbottomedge = ey >= map.h - borderwidth
+          local isbottomedge = ey >= map.h + titleheight - borderwidth
           if isleftedge or isrightedge or isbottomedge then
             window:startreposition(isleftedge and -1 or (isrightedge and 1 or 0), isbottomedge and 1 or 0)
             return
@@ -126,21 +138,24 @@ return {get = function(bolt)
         end
         local ex, ey = event:xy()
         local viewscale = viewscales[viewscaleindex]
-        map:setxy(clickmapx + ((clickpixelx - ex) / viewscale), clickmapy + ((ey - clickpixely) / viewscale))
+        map.x = clickmapx + ((clickpixelx - ex) / viewscale)
+        map.y = clickmapy + ((ey - clickpixely) / viewscale)
+        map.level = level
+        map.pendingredraw = true
       end)
       window:onreposition(function (event)
         local _, _, w, h = event:xywh()
         map.w = w
         map.h = h - titleheight
         if event:didresize() then
-          map:redraw()
+          map.pendingredraw = true
         end
       end)
       window:onscroll(function (event)
         viewscaleindex = viewscaleindex + (event:direction() and 1 or -1)
         if viewscaleindex < 1 then viewscaleindex = 1 end
         if viewscaleindex > viewscalecount then viewscaleindex = viewscalecount end
-        map:redraw()
+        map.pendingredraw = true
       end)
       map:redraw()
       return map
