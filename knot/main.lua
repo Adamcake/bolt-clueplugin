@@ -98,6 +98,8 @@ return {get = function(bolt)
   local objectsize = objecthalfsize * 2
   local targetcirclehalfsize = 18
   local targetcirclesize = targetcirclehalfsize * 2
+  local resolveinterval = 200000 -- 0.2 seconds
+  local clickresolvedelay = 1000000 -- 1 second
 
   -- converts a colour from the range 0.0-1.0 to the integer range 0-255
   local function convertcolour (col)
@@ -261,6 +263,8 @@ return {get = function(bolt)
             track.solutiondirection = 1
           end
         end
+
+        this.solvedarrows = this.arrows
       end
 
       local function handlerender2d (this, event, firstvertex)
@@ -448,9 +452,18 @@ return {get = function(bolt)
             end
           end
 
-          solve(this)
-          if not this.isvalid then return end
-          this.hasrunedata = true
+          if this.validrunecount == this.piececount then
+            this:solve()
+            if not this.isvalid then return end
+            this.hasrunedata = true
+          else
+            this:reset()
+          end
+        end
+
+        -- if enough time has elapsed since solving the puzzle, indicate that it needs to be re-solved
+        if this.nextsolvetime ~= nil and bolt.time() > this.nextsolvetime then
+          this:reset()
         end
       end
 
@@ -458,61 +471,63 @@ return {get = function(bolt)
         -- if no solution, use this data to find a solution, then return
         if not this.hasrunedata then
           handlerender2d(this, event, 1)
-          return
         end
 
-        -- look at every image
-        local gw, gh = bolt.gamewindowsize()
-        local tw, th = event:targetsize()
-        for i = 1, event:vertexcount(), event:verticesperimage() do
-          -- check if this is one of the 48x48 images of interest to us
-          local f = nil
-          local ax, ay, aw, ah, _, _ = event:vertexatlasdetails(i)
-          if aw == objectsize and ah == objectsize then
-            f = images[event:texturedata(ax, ay + objecthalfsize, aw * 4)]
-          end
-          if f ~= nil then
-            -- set the flag indicating that we've seen the puzzle on this frame
-            this.objectsfound = true
+        if this.solvedarrows then
+          -- look at every image
+          local gw, gh = bolt.gamewindowsize()
+          local tw, th = event:targetsize()
+          for i = 1, event:vertexcount(), event:verticesperimage() do
+            -- check if this is one of the 48x48 images of interest to us
+            local f = nil
+            local ax, ay, aw, ah, _, _ = event:vertexatlasdetails(i)
+            if aw == objectsize and ah == objectsize then
+              f = images[event:texturedata(ax, ay + objecthalfsize, aw * 4)]
+            end
+            if f ~= nil then
+              -- set the flag indicating that we've seen the puzzle on this frame
+              this.objectsfound = true
 
-            -- if this is an arrow, draw overlay info on top of it as appropriate
-            local id, dir = f()
-            if id >= 5 then
-              -- find the arrow in this.arrows that matches this one
-              local arrow = nil
-              local red, _, _, _ = event:vertexcolour(i)
-              red = convertcolour(red)
-              for _, a in ipairs(this.arrows) do
-                if a.red == red and a.direction == dir then
-                  arrow = a
-                  break
-                end
-              end
-
-              if arrow then
-                local track = arrow.track
-
-                -- if the arrow is newly pressed, change solutionposition
-                local pressed = id == 7
-                if pressed and not arrow.pressed then
-                  track.solutionposition = track.solutionposition + (track.solutiondirection == arrow.trackdir and -1 or 1)
-                  if (track.solutionposition < 0) then
-                    track.solutionposition = track.solutionposition + track.piececount
-                  end
-                  if track.solutionposition * 2 > track.piececount then
-                    track.solutionposition = track.piececount - track.solutionposition
-                    track.solutiondirection = 3 - track.solutiondirection
+              -- if this is an arrow, draw overlay info on top of it as appropriate
+              local id, dir = f()
+              if id >= 5 then
+                -- find the arrow in this.arrows that matches this one
+                local arrow = nil
+                local red, _, _, _ = event:vertexcolour(i)
+                red = convertcolour(red)
+                for _, a in ipairs(this.solvedarrows) do
+                  if a.red == red and a.direction == dir then
+                    arrow = a
+                    break
                   end
                 end
-                arrow.pressed = pressed
 
-                -- draw an overlay here
-                local sx2, sy2 = event:vertexxy(i)
-                local sx, sy = event:vertexxy(i + 2)
-                if track.solutionposition == 0 then goto nodraw end
-                if not (track.solutiondirection == arrow.trackdir) then goto nodraw end
-                drawnumber(math.abs(track.solutionposition), ((sx + sx2) / 2) * gw / tw, ((sy + sy2) / 2) * gh / th)
-                ::nodraw::
+                if arrow then
+                  local track = arrow.track
+
+                  -- if the arrow is newly pressed, change solutionposition
+                  local pressed = id == 7
+                  if pressed and not arrow.pressed then
+                    track.solutionposition = track.solutionposition + (track.solutiondirection == arrow.trackdir and -1 or 1)
+                    if (track.solutionposition < 0) then
+                      track.solutionposition = track.solutionposition + track.piececount
+                    end
+                    if track.solutionposition * 2 > track.piececount then
+                      track.solutionposition = track.piececount - track.solutionposition
+                      track.solutiondirection = 3 - track.solutiondirection
+                    end
+                    this.nextsolvetime = bolt.time() + clickresolvedelay
+                  end
+                  arrow.pressed = pressed
+
+                  -- draw an overlay here
+                  local sx2, sy2 = event:vertexxy(i)
+                  local sx, sy = event:vertexxy(i + 2)
+                  if track.solutionposition == 0 then goto nodraw end
+                  if not (track.solutiondirection == arrow.trackdir) then goto nodraw end
+                  drawnumber(math.abs(track.solutionposition), ((sx + sx2) / 2) * gw / tw, ((sy + sy2) / 2) * gh / th)
+                  ::nodraw::
+                end
               end
             end
           end
@@ -537,11 +552,28 @@ return {get = function(bolt)
           local x, y, z = event:modelvertexpoint(1, runedecorvertexid):get()
           local r, g, b, _ = event:modelvertexcolour(1, runedecorvertexid)
           local rune = {x = x, y = y, z = z, r = convertcolour(r), g = convertcolour(g), b = convertcolour(b)}
-          if piece.rune and not (piece.rune.x == rune.x and piece.rune.y == rune.y and piece.rune.z == rune.z and piece.rune.r == rune.r and piece.rune.g == rune.g and piece.rune.b == rune.b) then
+          if piece.rune and not runeeq(rune, piece.rune) then
             this.isvalid = false
+            return
           end
+          if not piece.rune then this.validrunecount = this.validrunecount + 1 end
           piece.rune = rune
         end
+      end
+
+      local function reset (this)
+        this.hasrunedata = false
+        this.tracks = {}
+        this.arrows = {}
+        this.arrowcount = 0
+        this.pieces = {}
+        this.piececount = 0
+        this.pieceheight = 0
+        this.validrunecount = 0
+        this.highesttrack = 0
+        this.firstmatch = nil
+        this.objectsfound = true
+        this.nextsolvetime = bolt.time() + resolveinterval
       end
 
       local object = {
@@ -553,13 +585,17 @@ return {get = function(bolt)
         pieces = {},
         piececount = 0,
         pieceheight = 0,
+        validrunecount = 0,
         objectsfound = true,
         highesttrack = 0,
+        nextsolvetime = nil,
 
         valid = valid,
         onswapbuffers = onswapbuffers,
         onrender2d = onrender2d,
         onrendericon = onrendericon,
+        solve = solve,
+        reset = reset,
       }
       handlerender2d(object, event, firstvertex)
       return object
