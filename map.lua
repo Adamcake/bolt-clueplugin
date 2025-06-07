@@ -139,21 +139,21 @@ return {get = function(bolt)
         map.x = clickmapx + ((clickpixelx - ex) / viewscale)
         map.y = clickmapy + ((ey - clickpixely) / viewscale)
         map.level = level
-        map.pendingredraw = true
+        map:redraw()
       end)
       window:onreposition(function (event)
         local _, _, w, h = event:xywh()
         map.w = w
         map.h = h - titleheight
         if event:didresize() then
-          map.pendingredraw = true
+          map:redraw()
         end
       end)
       window:onscroll(function (event)
         viewscaleindex = viewscaleindex + (event:direction() and 1 or -1)
         if viewscaleindex < 1 then viewscaleindex = 1 end
         if viewscaleindex > viewscalecount then viewscaleindex = viewscalecount end
-        map.pendingredraw = true
+        map:redraw()
       end)
       map:redraw()
       return map
