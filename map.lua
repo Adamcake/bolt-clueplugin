@@ -128,7 +128,6 @@ return {get = function(bolt)
         buf:setfloat32(44, y3)
         local shaderbuffer = bolt.createshaderbuffer(buf)
         lineprogram:drawtosurface(surface, shaderbuffer, 6)
-        print(string.format("draw %s,%s %s,%s %s,%s %s,%s", x1, y1, x2, y2, x3, y3, x4, y4))
       end
       surface:drawtowindow(window, 0, 0, map.w, map.h, 0, titleheight, map.w, map.h)
     end
