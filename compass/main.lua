@@ -2,13 +2,26 @@ return {get = function(bolt)
   local points = require("compass.points")
   local checkintervalmicros = 100000 -- tenth of a second
   local surfacemaybe, maybewidth, maybeheight = bolt.createsurfacefrompng("images.maybe")
-  local surfacenope, nopewidth, nopeheight = bolt.createsurfacefrompng("images.nope")
-  local radians180 = math.pi
-  local radians360 = 2 * radians180
-  local radians1 = radians180 / 180.0
-  local leniency = radians1 * 5.0
 
-  local function create (bolt)    
+  local anglediffminimum = 0.2 -- 0.2 radians = about 11 degrees. no particular reason, just a small but significant angle
+  local radians360 = math.pi * 2
+  local maxscanpoints = 3
+  local minframes = 5 -- minimum number of check-frames the player position and arrow angle must stay the same for the reading to be valid
+  local tilefactor = 512
+
+  local function create (bolt, onaddline)
+    -- returns the difference between two angles, accounting for (literal) edge-cases,
+    -- e.g. the difference between 1 degree and 359 degrees would return 2, not 358.
+    local function radiandiff (a, b)
+      local amod = a % radians360
+      local bmod = b % radians360
+      if amod > bmod then
+        return math.min(amod - bmod, (bmod + radians360) - amod)
+      else
+        return math.min(bmod - amod, (amod + radians360) - bmod)
+      end
+    end
+
     local function onrender3d (this, event)
       this.renderviewproj = event:viewprojmatrix()
       this.hasrecentmatrices = true
@@ -20,22 +33,42 @@ return {get = function(bolt)
         return
       elseif this.lastrendercompasspoint and event:modelcount() == 1 and event:modelvertexcount(1) == 42 then
         this.arrowfound = true
+        if not this.arrowfoundpreviousframe then
+          this.unchangedframes = 0
+          this.lastangle = nil
+        end
         local t = bolt.time()
         if t >= this.nextchecktime then
           local transform = event:modelmodelmatrix(1)
           local x1, y1, _ = bolt.point(0, 6, 0):transform(transform):get()
           local x2, y2, _ = bolt.point(0, 6, 1):transform(transform):get()
           local arrowdirection = math.atan2(y2 - y1, x2 - x1)
+          local lastx, _, lastz = bolt.playerposition():get()
 
-          for i, point in pairs(this.pointlist) do
-            local lastx, _, lastz = bolt.playerposition():get()
-            local xdiff = (point.x + 0.5) - (lastx / 512.0)
-            local ydiff = (point.z + 0.5) - (lastz / 512.0)
-            local pointdirection = math.atan2(ydiff, xdiff)
-            local pointdist = math.sqrt((xdiff * xdiff) + (ydiff * ydiff))
-            local anglediff = math.abs(pointdirection - arrowdirection)
-            if pointdist > 0.5 and anglediff < leniency or (radians360 - anglediff) < leniency then
-              print(string.format("possible target at %d,%d (%.01f away) (angle diff is %.01f)", point.x, point.z, pointdist, anglediff * 180.0 / radians180))
+          local changed = arrowdirection ~= this.lastangle or lastx ~= this.lastx or lastz ~= this.lasty
+          if changed then
+            this.lastangle = arrowdirection
+            this.lastx = lastx
+            this.lasty = lastz
+            this.unchangedframes = 0
+          else
+            this.unchangedframes = this.unchangedframes + 1
+          end
+
+          if this.unchangedframes >= minframes and this.scancount < maxscanpoints then
+            local use = true
+            for _, s in ipairs(this.scanpoints) do
+              if radiandiff(s.direction, arrowdirection) < anglediffminimum then
+                use = false
+                break
+              end
+            end
+
+            if use then
+              local i = this.scancount + 1
+              this.scanpoints[i] = {x = lastx / tilefactor, y = lastz / tilefactor, direction = arrowdirection}
+              this.scancount = i
+              onaddline()
             end
           end
 
@@ -52,22 +85,13 @@ return {get = function(bolt)
       if this.hasrecentmatrices then
         local gx, gy, gw, gh = bolt.gameviewxywh()
         for i, point in pairs(this.pointlist) do
-          local p = bolt.point((point.x + 0.5) * 512.0, point.y, (point.z + 0.5) * 512.0)
+          local p = bolt.point((point.x + 0.5) * tilefactor, point.y, (point.z + 0.5) * tilefactor)
           local px, py, pdist = p:transform(this.renderviewproj):aspixels()
           if pdist > 0.0 and pdist <= 1.0 and px >= gx and py >= gy and px <= (gx + gw) and py <= (gy + gh) then
-            if point.state < 0 then
-              -- eliminated point
-              local scale = 0.6
-              local imgradius = 16 * scale
-              local imgsize = 32 * scale
-              surfacenope:drawtoscreen(0, 0, nopewidth, nopeheight, px - imgradius, py - imgradius, imgsize, imgsize)
-            else
-              -- normal non-eliminated point
-              local scale = 0.75
-              local imgradius = 16 * scale
-              local imgsize = 32 * scale
-              surfacemaybe:drawtoscreen(0, 0, maybewidth, maybeheight, px - imgradius, py - imgradius, imgsize, imgsize)
-            end
+            local scale = 0.75
+            local imgradius = 16 * scale
+            local imgsize = 32 * scale
+            surfacemaybe:drawtoscreen(0, 0, maybewidth, maybeheight, px - imgradius, py - imgradius, imgsize, imgsize)
           end
         end
       end
@@ -85,11 +109,18 @@ return {get = function(bolt)
 
     return {
       pointlist = points.get(),
+      scanpoints = {},
+      scancount = 0,
       nextchecktime = bolt.time(),
       hasrecentmatrices = false,
       lastrendercompasspoint = false,
       arrowfound = false,
       arrowfoundpreviousframe = false,
+
+      lastx = 0,
+      lasty = 0,
+      lastangle = nil,
+      unchangedframes = 0,
 
       onrender3d = onrender3d,
       onrenderbigicon = onrenderbigicon,

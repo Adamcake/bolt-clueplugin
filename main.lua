@@ -52,7 +52,11 @@ bolt.onrenderbigicon(function (event)
   elseif lastrendercompasspoint and event:modelcount() == 1 and event:modelvertexcount(1) == 42 then
     -- compass clue arrow
     lastrendercompasspoint = false
-    setobject(compasses.create(bolt))
+    local c = compasses.create(bolt, function () m:redraw() end)
+    setobject(c)
+    m.points = c.pointlist
+    m.lines = c.scanpoints
+    m:redraw()
   end
 end)
 
@@ -123,5 +127,8 @@ bolt.onswapbuffers(function (event)
     lastvalid = t
   elseif t > (lastvalid + validitygraceperiod) then
     currentobject = nil
+    m.points = nil
+    m.lines = nil
+    m:redraw()
   end
 end)
