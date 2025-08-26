@@ -203,7 +203,9 @@ local function solve_24_puzzle(start, goal)
     if currentKey == serialize(goal) then
       return reconstruct_path(cameFrom, current)
     end
-    -- if gScore[currentKey] > 46 then return nil end -- too many iterations??
+    if gScore[currentKey] > 18 then 
+      return reconstruct_path(cameFrom, current)
+    end -- too many iterations??
 
     visited[currentKey] = true
     -- print("visited "..  currentKey)
