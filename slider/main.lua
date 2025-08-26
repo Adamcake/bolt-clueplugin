@@ -203,9 +203,6 @@ local function solve_24_puzzle(start, goal)
     if currentKey == serialize(goal) then
       return reconstruct_path(cameFrom, current)
     end
-    if gScore[currentKey] > 18 then 
-      return reconstruct_path(cameFrom, current)
-    end -- too many iterations??
 
     visited[currentKey] = true
     -- print("visited "..  currentKey)
@@ -221,6 +218,10 @@ local function solve_24_puzzle(start, goal)
         end
       end
     end
+    if gScore[currentKey] > 18 then 
+      local promising, _ = openSet:extract_min()
+      return reconstruct_path(cameFrom, promising)
+    end -- too many iterations??
   end
   return nil -- No solution found
 end
