@@ -345,8 +345,6 @@ return {get = function(bolt)
                 coroutine.yield()
                 print("resuming")
                 timestarted = bolt.time()
-                -- local promising, _ = openSet:extract_min()
-                -- return reconstruct_path(cameFrom, promising)
               end -- too many iterations??
             end
             print("ended in disarray")
@@ -359,6 +357,7 @@ return {get = function(bolt)
         print("co status : " .. coroutine.status(this.solver))
         -- this.solutionindex = 1
         this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
+        if this.issolved then this.solutionindex = 1 end
 
       end
 
@@ -373,10 +372,10 @@ return {get = function(bolt)
       end
 
       local function drawstep(this, event, h)
-        if this.solution[this.solutionindex + 1 + h] ~= nil then 
+        if this.solution[this.solutionindex  + h] ~= nil then 
           local index
           for i = 1, 25 do
-            if this.solution[this.solutionindex + 1 + h][i] == 0 then index = i break end
+            if this.solution[this.solutionindex  + h][i] == 0 then index = i break end
           end -- fori
           -- print(index)
           local x, y = event:vertexxy(firstvertex)
@@ -386,46 +385,82 @@ return {get = function(bolt)
         end
       end
 
+      local function iscorrectevent(this, event, firstvertex)
+        local ax, ay, aw, ah, _, _ = event:vertexatlasdetails(firstvertex)
+        return aw == objectsize and ah == objectsize
+      end
+
+      local function shallowtablecompare(a, b)
+        if a == b then return true end
+        if a == nil or b == nil then return false end
+        if #a ~=#b then return false end
+        for i=1,#a do
+          if a[i] ~= b[i] then return false end
+        end
+        return true
+      end
+
+      local function isstillsolved(this, currentstate)
+        if this.solution == nil or #this.solution < 1 then 
+          return false 
+        end
+        if shallowtablecompare(currentstate, this.solution[this.solutionindex]) then 
+          return true 
+        end
+        for i=this.solutionindex, #this.solution do 
+          if shallowtablecompare(currentstate, this.solution[i]) then 
+            this.solutionindex = i 
+            return true
+          end
+        end
+        for i=this.solutionindex, 1, -1 do 
+          if shallowtablecompare(currentstate, this.solution[i]) then
+            this.solutionindex = i
+           return true 
+          end
+        end
+        return false
+      end
+
       local function onrender2d (this, event)
+        if not iscorrectevent(this, event, firstvertex) then return end
         local onscreen = imagetonumbers(this, event, firstvertex)
-        if onscreen ~= nil and onscreen[1] ~= nil and (not this.issolved or serialize(onscreen) ~= serialize(this.state)) then
-          local newseriesindex = incrementsolutionindex(this, state)
-          if newseriesindex == -1 then 
-            this.issolved = false
+        local stillsolved = false
+        if onscreen ~= nil and onscreen[1] ~= nil then 
+          stillsolved = isstillsolved(this, onscreen) 
+          if this.issolved ~= nil and not stillsolved then 
+            this.solver = nil 
+            this.issolved = nil
+          end
+        end 
+        if onscreen ~= nil and onscreen[1] ~= nil and ((not this.issolved and not stillsolved) or serialize(onscreen) ~= serialize(this.state)) then
             this.state = onscreen
             this.statelength = #onscreen
             for i = 1, 25, 1 do
               if this.state[i] == nil then return end
             end -- fori
-            -- printstate(this.state)
             if not this.issolved then
               if this.solver == nil then 
+                this.solution = {}
                 solve(this)
               else
                 _, this.solution = coroutine.resume(this.solver)
                 print(this.solver)
                 print("co status : " .. coroutine.status(this.solver))
-                -- this.solutionindex = 1
                 this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
+                if this.issolved then this.solutionindex = 1 end
               end -- this.solver == nil
             end -- not issolved
-          else 
-            this.solutionindex = newseriesindex
-          end -- newseriesindex
         end -- onscreen ~=nil and .. 
-        local ax, ay, aw, ah, _, _ = event:vertexatlasdetails(firstvertex)
-        if aw == objectsize and ah == objectsize then
-          if this.issolved and this.solution and this.solution[2] then
+        if iscorrectevent(this, event, firstvertex) then
+          if this.issolved and this.solution and this.solution[this.solutionindex + 1] then
             this.solver = null
-            for i=1, #this.solution-1 do
-              -- printstate(this.solution[i])
-            end -- fori
             
             for h=1,4 do 
               drawstep(this, event, h)
             end -- forh
           end -- if this.solution...
-        end -- if aw == objectsize ... 
+        end -- if iscorrectevent
       end
 
       local function reset (this)
