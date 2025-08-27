@@ -183,49 +183,6 @@ local function reconstruct_path(cameFrom, current)
   return path
 end
 
-local function solve_24_puzzle(start, goal)
-  -- print("solve start " .. table.getn(start) == table.getn(goal))
-  local openSet = FibHeap.new()
-  openSet:insert(manhattan(start, goal), start)
-
-  local cameFrom = {}
-  local gScore = {[serialize(start)] = 0}
-  local visited = {}
-
-  while openSet.n > 0 do
-    local current, _ = openSet:extract_min()
-    -- if manhattan(current, goal) == 0 then
-    --   print("manhattan 0")
-    --   return reconstruct_path(cameFrom, current)
-    -- end
-    local currentKey = serialize(current)
-
-    if currentKey == serialize(goal) then
-      return reconstruct_path(cameFrom, current)
-    end
-
-    visited[currentKey] = true
-    print("visited "..  currentKey)
-    for _, neighbor in ipairs(get_neighbors(current)) do
-      local neighborKey = serialize(neighbor)
-      if not visited[neighborKey] then 
-        local tentative_gScore = gScore[currentKey] + 1
-        if not gScore[neighborKey] or tentative_gScore < gScore[neighborKey] then
-          cameFrom[neighborKey] = current
-          gScore[neighborKey] = tentative_gScore
-          local fScore = tentative_gScore + manhattan(neighbor, goal)
-          openSet:insert(fScore, neighbor)
-        end
-      end
-    end
-    -- if gScore[currentKey] > 18 then 
-    --   local promising, _ = openSet:extract_min()
-    --   return reconstruct_path(cameFrom, promising)
-    -- end -- too many iterations??
-  end
-  return nil -- No solution found
-end
-
 return {get = function(bolt)
 
   local decoder = require("slider.puzzles")
@@ -341,13 +298,72 @@ return {get = function(bolt)
 
       local function solve(this)
         if this.issolved then return this.solution end
-        this.issolved = true
-        this.solution = solve_24_puzzle(this.state, goal)
-        this.solutionindex = 1
-        this.issolved = #this.solution > 0
+        -- this.issolved = true
+
+        print("new solver")
+        this.solver = coroutine.create(
+          function (start, goal, bolt)
+            local timestarted = bolt.time()
+            -- print("solve start " .. table.getn(start) == table.getn(goal))
+            local openSet = FibHeap.new()
+            openSet:insert(manhattan(start, goal), start)
+
+            local cameFrom = {}
+            local gScore = {[serialize(start)] = 0}
+            local visited = {}
+
+            while openSet.n > 0 do
+              local current, _ = openSet:extract_min()
+              -- if manhattan(current, goal) == 0 then
+              --   print("manhattan 0")
+              --   return reconstruct_path(cameFrom, current)
+              -- end
+              local currentKey = serialize(current)
+
+              if currentKey == serialize(goal) then
+                print("\"returning\"")
+                coroutine.yield(reconstruct_path(cameFrom, current))
+                -- return reconstruct_path(cameFrom, current)
+              end
+
+              visited[currentKey] = true
+              -- print("visited "..  currentKey)
+              for _, neighbor in ipairs(get_neighbors(current)) do
+                local neighborKey = serialize(neighbor)
+                if not visited[neighborKey] then 
+                  local tentative_gScore = gScore[currentKey] + 1
+                  if not gScore[neighborKey] or tentative_gScore < gScore[neighborKey] then
+                    cameFrom[neighborKey] = current
+                    gScore[neighborKey] = tentative_gScore
+                    local fScore = tentative_gScore + manhattan(neighbor, goal)
+                    openSet:insert(fScore, neighbor)
+                  end
+                end
+              end
+              if bolt.time() - timestarted >= 80000 then 
+                print("pausing")
+                coroutine.yield()
+                print("resuming")
+                timestarted = bolt.time()
+                -- local promising, _ = openSet:extract_min()
+                -- return reconstruct_path(cameFrom, promising)
+              end -- too many iterations??
+            end
+            print("ended in disarray")
+            -- return nil -- No solution found
+          end
+
+        )
+        _, this.solution = coroutine.resume(this.solver, this.state, goal, bolt)
+        print(this.solver)
+        print("co status : " .. coroutine.status(this.solver))
+        -- this.solutionindex = 1
+        this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
+
       end
 
       local function incrementsolutionindex(this, state)
+        if not this.solution or type(this.solution) ~= "table" then return -1 end
         for i=this.solutionindex, #this.solution do
           if this.solution[i] ~= nil and serialize(this.solution[i]) == serialize(state) then 
             return i
@@ -357,10 +373,10 @@ return {get = function(bolt)
       end
 
       local function drawstep(this, event, h)
-        if this.solution[this.solutionindex + h] ~= nil then 
+        if this.solution[this.solutionindex + 1 + h] ~= nil then 
           local index
           for i = 1, 25 do
-            if this.solution[this.solutionindex + h][i] == 0 then index = i break end
+            if this.solution[this.solutionindex + 1 + h][i] == 0 then index = i break end
           end -- fori
           -- print(index)
           local x, y = event:vertexxy(firstvertex)
@@ -371,29 +387,38 @@ return {get = function(bolt)
       end
 
       local function onrender2d (this, event)
-        local state = imagetonumbers(this, event, firstvertex)
-        if state ~= nil and state[1] ~= nil and serialize(state) ~= serialize(this.state) then
+        local onscreen = imagetonumbers(this, event, firstvertex)
+        if onscreen ~= nil and onscreen[1] ~= nil and (not this.issolved or serialize(onscreen) ~= serialize(this.state)) then
           local newseriesindex = incrementsolutionindex(this, state)
           if newseriesindex == -1 then 
             this.issolved = false
-            this.state = state
-            this.statelength = #state
+            this.state = onscreen
+            this.statelength = #onscreen
             for i = 1, 25, 1 do
               if this.state[i] == nil then return end
             end -- fori
-            printstate(this.state)
+            -- printstate(this.state)
             if not this.issolved then
-              solve(this)
+              if this.solver == nil then 
+                solve(this)
+              else
+                _, this.solution = coroutine.resume(this.solver)
+                print(this.solver)
+                print("co status : " .. coroutine.status(this.solver))
+                -- this.solutionindex = 1
+                this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
+              end -- this.solver == nil
             end -- not issolved
           else 
             this.solutionindex = newseriesindex
           end -- newseriesindex
-        end
+        end -- onscreen ~=nil and .. 
         local ax, ay, aw, ah, _, _ = event:vertexatlasdetails(firstvertex)
         if aw == objectsize and ah == objectsize then
-          if this.solution and this.solution[2] then
+          if this.issolved and this.solution and this.solution[2] then
+            this.solver = null
             for i=1, #this.solution-1 do
-              printstate(this.solution[i])
+              -- printstate(this.solution[i])
             end -- fori
             
             for h=1,4 do 
@@ -411,6 +436,7 @@ return {get = function(bolt)
         this.issolved = false
         this.solutionindex = 0
         this.nextsolvetime = bolt.time() + resolveinterval
+        this.solver = nil
       end
 
       local object = {
@@ -423,6 +449,7 @@ return {get = function(bolt)
         solutionstate = {},
         issolved = false,
         leftmostx = 0,
+        solver = nil,
 
         valid = valid,
         onrender2d = onrender2d,
