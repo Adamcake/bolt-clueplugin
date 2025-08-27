@@ -300,7 +300,7 @@ return {get = function(bolt)
         if this.issolved then return this.solution end
         -- this.issolved = true
 
-        print("new solver")
+        -- print("new solver")
         this.solver = coroutine.create(
           function (start, goal, bolt)
             local timestarted = bolt.time()
@@ -321,7 +321,7 @@ return {get = function(bolt)
               local currentKey = serialize(current)
 
               if currentKey == serialize(goal) then
-                print("\"returning\"")
+                -- print("\"returning\"")
                 coroutine.yield(reconstruct_path(cameFrom, current))
                 -- return reconstruct_path(cameFrom, current)
               end
@@ -341,9 +341,9 @@ return {get = function(bolt)
                 end
               end
               if bolt.time() - timestarted >= 80000 then 
-                print("pausing")
+                -- print("pausing")
                 coroutine.yield()
-                print("resuming")
+                -- print("resuming")
                 timestarted = bolt.time()
               end -- too many iterations??
             end
@@ -353,8 +353,8 @@ return {get = function(bolt)
 
         )
         _, this.solution = coroutine.resume(this.solver, this.state, goal, bolt)
-        print(this.solver)
-        print("co status : " .. coroutine.status(this.solver))
+        -- print(this.solver)
+        -- print("co status : " .. coroutine.status(this.solver))
         -- this.solutionindex = 1
         this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
         if this.issolved then this.solutionindex = 1 end
@@ -422,9 +422,27 @@ return {get = function(bolt)
         return false
       end
 
+      local function iscompleted(state) 
+        return state and type(state) == "table" and shallowtablecompare(state, goal)
+      end
+
       local function onrender2d (this, event)
-        if not iscorrectevent(this, event, firstvertex) then return end
+        if this.lasttime == nil then
+          this.lasttime = bolt.time()
+        end
+        if not iscorrectevent(this, event, firstvertex) then 
+          if bolt.time() - this.lasttime > 1200000 then
+            print("how long has it been...")
+            this.isvalid = fakse
+          end 
+          return 
+        end
+        this.lasttime = bolt.time()
         local onscreen = imagetonumbers(this, event, firstvertex)
+        if iscompleted(onscreen) then
+          this.isvalid = false
+          return
+        end
         local stillsolved = false
         if onscreen ~= nil and onscreen[1] ~= nil then 
           stillsolved = isstillsolved(this, onscreen) 
@@ -445,8 +463,8 @@ return {get = function(bolt)
                 solve(this)
               else
                 _, this.solution = coroutine.resume(this.solver)
-                print(this.solver)
-                print("co status : " .. coroutine.status(this.solver))
+                -- print(this.solver)
+                -- print("co status : " .. coroutine.status(this.solver))
                 this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
                 if this.issolved then this.solutionindex = 1 end
               end -- this.solver == nil
@@ -455,11 +473,10 @@ return {get = function(bolt)
         if iscorrectevent(this, event, firstvertex) then
           if this.issolved and this.solution and this.solution[this.solutionindex + 1] then
             this.solver = null
-            
             for h=1,4 do 
               drawstep(this, event, h)
             end -- forh
-          end -- if this.solution...
+          end -- if this.issolved and this.solution ...
         end -- if iscorrectevent
       end
 
@@ -485,6 +502,7 @@ return {get = function(bolt)
         issolved = false,
         leftmostx = 0,
         solver = nil,
+        lasttime = nil,
 
         valid = valid,
         onrender2d = onrender2d,
