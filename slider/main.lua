@@ -184,7 +184,7 @@ local function reconstruct_path(cameFrom, current)
 end
 
 local function solve_24_puzzle(start, goal)
-  print("solve start " .. table.getn(start) == table.getn(goal))
+  -- print("solve start " .. table.getn(start) == table.getn(goal))
   local openSet = FibHeap.new()
   openSet:insert(manhattan(start, goal), start)
 
@@ -205,7 +205,7 @@ local function solve_24_puzzle(start, goal)
     end
 
     visited[currentKey] = true
-    -- print("visited "..  currentKey)
+    print("visited "..  currentKey)
     for _, neighbor in ipairs(get_neighbors(current)) do
       local neighborKey = serialize(neighbor)
       if not visited[neighborKey] then 
@@ -218,10 +218,10 @@ local function solve_24_puzzle(start, goal)
         end
       end
     end
-    if gScore[currentKey] > 18 then 
-      local promising, _ = openSet:extract_min()
-      return reconstruct_path(cameFrom, promising)
-    end -- too many iterations??
+    -- if gScore[currentKey] > 18 then 
+    --   local promising, _ = openSet:extract_min()
+    --   return reconstruct_path(cameFrom, promising)
+    -- end -- too many iterations??
   end
   return nil -- No solution found
 end
@@ -258,6 +258,12 @@ return {get = function(bolt)
     create = function (event, firstvertex, x, y, x2, y2)
       local verticesperimage = event:verticesperimage()
 
+      local function printstate(state) 
+        for i = 1, 25, 5 do
+          print(state[i] .. " " .. state[i+1] .. " " .. state[i+2] .. " " .. state[i+3] .. " " .. state[i+4])
+        end
+      end
+
       local function imagetonumbers (this, event, firstvertex)
         local state = {}
         local statelength = 0
@@ -285,13 +291,13 @@ return {get = function(bolt)
               end
 
               if currentx < this.leftmostx - 40 then --we started on col 2 instead of col 1
-                  this.leftmostx = currentx
-                  cols = {0, 1, 1, 1, 1}
+                this.leftmostx = currentx
+                cols = {0, 1, 1, 1, 1}
               end --currentx < ...
 
               local x = math.floor((currentx - this.leftmostx) / objectsize) +1
               local y = math.floor((currenty - firstpositiony) / objectsize) +1
-              print("we're at "..x..", "..y)
+              -- print("we're at "..x..", "..y)
               rows[y] = rows[y] + 1
               cols[x] = cols[x] +  1
 
@@ -315,7 +321,7 @@ return {get = function(bolt)
           end
 
           local holeposition = (shortrow-1) * 5 + shortcol
-          print(holeposition)
+          -- print(holeposition)
 
           for i = #state, holeposition, -1 do 
             state[i+1] = state[i]
@@ -324,10 +330,8 @@ return {get = function(bolt)
 
         end
 
-        for j=1, #state,5 do
-          print(state[j] .. " " .. state[j+1] .. " " .. state[j+2] .. " " .. state[j+3] .. " " .. state[j+4])
-        end -- forj
-        print("\n")
+        -- printstate(state)
+        -- print("\n")
         return state
       end
 
@@ -340,7 +344,7 @@ return {get = function(bolt)
         this.issolved = true
         this.solution = solve_24_puzzle(this.state, goal)
         this.solutionindex = 1
-        this.issolved = not not this.solution
+        this.issolved = #this.solution > 0
       end
 
       local function incrementsolutionindex(this, state)
@@ -349,6 +353,20 @@ return {get = function(bolt)
             return i
           end
         return -1
+        end
+      end
+
+      local function drawstep(this, event, h)
+        if this.solution[this.solutionindex + h] ~= nil then 
+          local index
+          for i = 1, 25 do
+            if this.solution[this.solutionindex + h][i] == 0 then index = i break end
+          end -- fori
+          -- print(index)
+          local x, y = event:vertexxy(firstvertex)
+          local newx = this.leftmostx + ((index-1) % 5 ) * (objectsize + 4) - objecthalfsize
+          local newy = y + math.floor((index-1) / 5 ) * (objectsize + 8 ) - objecthalfsize
+          drawnumber(h, newx , newy)
         end
       end
 
@@ -363,9 +381,7 @@ return {get = function(bolt)
             for i = 1, 25, 1 do
               if this.state[i] == nil then return end
             end -- fori
-            for i = 1, 25, 5 do
-              print(this.state[i] .. " " .. this.state[i+1] .. " " .. this.state[i+2] .. " " .. this.state[i+3] .. " " .. this.state[i+4])
-            end -- fori
+            printstate(this.state)
             if not this.issolved then
               solve(this)
             end -- not issolved
@@ -377,23 +393,11 @@ return {get = function(bolt)
         if aw == objectsize and ah == objectsize then
           if this.solution and this.solution[2] then
             for i=1, #this.solution-1 do
-              for j=1, #this.solution[i],5 do
-                print(this.solution[i][j] .. " " .. this.solution[i][j+1] .. " " .. this.solution[i][j+2] .. " " .. this.solution[i][j+3] .. " " .. this.solution[i][j+4])
-              end -- forj
+              printstate(this.solution[i])
             end -- fori
             
             for h=1,4 do 
-              if this.solution[this.solutionindex + h] ~= nil then 
-                local index
-                for i = 1, 25 do
-                  if this.solution[this.solutionindex + h][i] == 0 then index = i break end
-                end -- fori
-                -- print(index)
-                local x, y = event:vertexxy(firstvertex)
-                local newx = this.leftmostx + ((index-1) % 5 ) * (objectsize + 4) - objecthalfsize
-                local newy = y + math.floor((index-1) / 5 ) * (objectsize + 8 ) - objecthalfsize
-                drawnumber(h, newx , newy)
-              end
+              drawstep(this, event, h)
             end -- forh
           end -- if this.solution...
         end -- if aw == objectsize ... 
