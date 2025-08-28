@@ -237,7 +237,7 @@ return {get = function(bolt)
           if aw == objectsize and ah == objectsize then
             correctevent = true
             local currentx, currenty = event:vertexxy(i)
-            local f = decoder.get(event:texturedata(ax, ay + 11, aw * 4))
+            local f = decoder.get(event, ax, ay, aw * 4)
             if f~= nil then
               if not first then
                 firstpositionx, firstpositiony = event:vertexxy(i)
@@ -433,7 +433,7 @@ return {get = function(bolt)
         if not iscorrectevent(this, event, firstvertex) then 
           if bolt.time() - this.lasttime > 1200000 then
             print("how long has it been...")
-            this.isvalid = fakse
+            this.isvalid = false
           end 
           return 
         end
@@ -472,7 +472,7 @@ return {get = function(bolt)
         end -- onscreen ~=nil and .. 
         if iscorrectevent(this, event, firstvertex) then
           if this.issolved and this.solution and this.solution[this.solutionindex + 1] then
-            this.solver = null
+            this.solver = nil
             for h=1,4 do 
               drawstep(this, event, h)
             end -- forh
