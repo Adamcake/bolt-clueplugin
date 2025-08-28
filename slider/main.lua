@@ -192,7 +192,6 @@ return {get = function(bolt)
   local digits, _, digitheight = bolt.createsurfacefrompng("images.digits")
   local digithalfwidth = 8
   local digitwidth = digithalfwidth * 2
-  local runedecorvertexid = 175
   local objecthalfsize = 24
   local objectsize = 49
   local resolveinterval = 200000 -- 0.2 seconds
@@ -224,11 +223,8 @@ return {get = function(bolt)
       local function imagetonumbers (this, event, firstvertex)
         local state = {}
         local statelength = 0
-        local hole = false
         local first = false
         local firstpositionx, firstpositiony
-        local previousx, previousy
-        local rightmostblockx = 0
         local rows = {0, 0, 0, 0, 0}
         local cols = {0, 0, 0, 0, 0}
         local correctevent = false
@@ -242,8 +238,6 @@ return {get = function(bolt)
               if not first then
                 firstpositionx, firstpositiony = event:vertexxy(i)
                 this.leftmostx = firstpositionx
-                previousx, previousy = firstpositionx, firstpositiony
-                rightmostblockx = firstpositionx
                 first = true
               end
 
@@ -258,8 +252,6 @@ return {get = function(bolt)
               rows[y] = rows[y] + 1
               cols[x] = cols[x] +  1
 
-              previousx = currentx
-              previousy = currenty
               statelength = statelength + 1
               state[statelength] = f + 1
               -- drawnumber(state[statelength] , currentx-objecthalfsize, currenty-objecthalfsize)
@@ -359,16 +351,6 @@ return {get = function(bolt)
         this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
         if this.issolved then this.solutionindex = 1 end
 
-      end
-
-      local function incrementsolutionindex(this, state)
-        if not this.solution or type(this.solution) ~= "table" then return -1 end
-        for i=this.solutionindex, #this.solution do
-          if this.solution[i] ~= nil and serialize(this.solution[i]) == serialize(state) then 
-            return i
-          end
-        return -1
-        end
       end
 
       local function drawstep(this, event, h)
