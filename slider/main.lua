@@ -1,177 +1,132 @@
 -- ==========================================================
--- Fibonacci Heap (minimal)
+-- Binary Min-Heap (array-based priority queue)
 -- ==========================================================
-local FibHeap = {}
-FibHeap.__index = FibHeap
+local BinHeap = {}
+BinHeap.__index = BinHeap
 
-function FibHeap.new()
-    return setmetatable({min = nil, n = 0}, FibHeap)
+function BinHeap.new()
+    return setmetatable({keys = {}, values = {}, n = 0}, BinHeap)
 end
 
-local function new_node(key, value)
-    return {
-        key = key, value = value, degree = 0, mark = false,
-        parent = nil, child = nil, left = nil, right = nil
-    }
-end
+local function parent(i) return math.floor(i / 2) end
+local function left(i) return i * 2 end
+local function right(i) return i * 2 + 1 end
 
-function FibHeap:insert(key, value)
-    local node = new_node(key, value)
-    node.left = node
-    node.right = node
-    if not self.min then
-        self.min = node
-    else
-        -- insert into root list
-        node.right = self.min.right
-        node.left = self.min
-        self.min.right.left = node
-        self.min.right = node
-        if key < self.min.key then
-            self.min = node
-        end
-    end
+function BinHeap:insert(key, value)
     self.n = self.n + 1
-    return node
+    local i = self.n
+    self.keys[i] = key
+    self.values[i] = value
+
+    -- sift up
+    while i > 1 do
+        local p = parent(i)
+        if self.keys[p] <= self.keys[i] then break end
+        self.keys[p], self.keys[i] = self.keys[i], self.keys[p]
+        self.values[p], self.values[i] = self.values[i], self.values[p]
+        i = p
+    end
 end
 
-function FibHeap:link(y, x)
-    y.left.right = y.right
-    y.right.left = y.left
-    y.parent = x
-    if not x.child then
-        x.child = y
-        y.left = y
-        y.right = y
-    else
-        y.left = x.child
-        y.right = x.child.right
-        x.child.right.left = y
-        x.child.right = y
-    end
-    x.degree = x.degree + 1
-    y.mark = false
-end
+function BinHeap:extract_min()
+    if self.n == 0 then return nil, nil end
+    local rootKey = self.keys[1]
+    local rootValue = self.values[1]
+    local lastKey = self.keys[self.n]
+    local lastValue = self.values[self.n]
+    self.keys[self.n] = nil
+    self.values[self.n] = nil
+    self.n = self.n - 1
 
-function FibHeap:consolidate()
-    local A = {}
-    local roots = {}
-    local x = self.min
-    if x then
-        repeat
-            table.insert(roots, x)
-            x = x.right
-        until x == self.min
-    end
-    for _, w in ipairs(roots) do
-        local x = w
-        local d = x.degree
-        while A[d] do
-            local y = A[d]
-            if x.key > y.key then
-                x, y = y, x
+    if self.n > 0 then
+        self.keys[1] = lastKey
+        self.values[1] = lastValue
+
+        local i = 1
+        while true do
+            local l, r = left(i), right(i)
+            local smallest = i
+            if l <= self.n and self.keys[l] < self.keys[smallest] then
+                smallest = l
             end
-            self:link(y, x)
-            A[d] = nil
-            d = d + 1
-        end
-        A[d] = x
-    end
-    self.min = nil
-    for _, a in pairs(A) do
-        if not self.min then
-            self.min = a
-            a.left = a
-            a.right = a
-        else
-            a.left = self.min
-            a.right = self.min.right
-            self.min.right.left = a
-            self.min.right = a
-            if a.key < self.min.key then
-                self.min = a
+            if r <= self.n and self.keys[r] < self.keys[smallest] then
+                smallest = r
             end
+            if smallest == i then break end
+            self.keys[i], self.keys[smallest] = self.keys[smallest], self.keys[i]
+            self.values[i], self.values[smallest] = self.values[smallest], self.values[i]
+            i = smallest
         end
     end
-end
 
-function FibHeap:extract_min()
-    local z = self.min
-    if z then
-        if z.child then
-            local c = z.child
-            repeat
-                local nextc = c.right
-                c.parent = nil
-                c.left.right = c.right
-                c.right.left = c.left
-                c.left = self.min
-                c.right = self.min.right
-                self.min.right.left = c
-                self.min.right = c
-                c = nextc
-            until c == z.child
-        end
-        z.left.right = z.right
-        z.right.left = z.left
-        if z == z.right then
-            self.min = nil
-        else
-            self.min = z.right
-            self:consolidate()
-        end
-        self.n = self.n - 1
-    end
-    return z and z.value or nil, z and z.key or nil
-end
-
-local function table_copy(tbl)
-  local copy = {}
-  for i = 1, #tbl do copy[i] = tbl[i] end
-  return copy
+    return rootValue, rootKey
 end
 
 local function serialize(state)
-  return table.concat(state, ",")
+    local chars = {}
+    for i = 1, 25 do
+        chars[i] = string.char(state[i])
+    end
+    return table.concat(chars)
 end
 
-local function manhattan(state, goal)
+-- Precompute goal positions (value -> {x,y})
+local function build_goal_positions(goal)
+  local positions = {}
+  for i = 1, #goal do
+    local val = goal[i]
+    local x, y = ((i - 1) % 5), math.floor((i - 1) / 5)
+    positions[val] = {x = x, y = y}
+  end
+  return positions
+end
+
+local function manhattan(state, goal_positions)
   local dist = 0
   for i = 1, 25 do
     local val = state[i]
     if val ~= 0 then
-      local goalIndex = 0
-      for j = 1, 25 do
-        if goal[j] == val then goalIndex = j break end
-      end
       local x1, y1 = ((i - 1) % 5), math.floor((i - 1) / 5)
-      local x2, y2 = ((goalIndex - 1) % 5), math.floor((goalIndex - 1) / 5)
-      dist = dist + math.abs(x1 - x2) + math.abs(y1 - y2)
+      local gp = goal_positions[val]
+      dist = dist + math.abs(x1 - gp.x) + math.abs(y1 - gp.y)
     end
   end
   return dist
 end
 
 local function get_neighbors(state)
-  local neighbors = {}
-  local index
-  for i = 1, 25 do
-    if state[i] == 0 then index = i break end
-  end
-  local x, y = (index - 1) % 5, math.floor((index - 1) / 5)
-  local moves = {
-    {x = x - 1, y = y}, {x = x + 1, y = y},
-    {x = x, y = y - 1}, {x = x, y = y + 1}
-  }
-  for _, m in ipairs(moves) do
-    if m.x >= 0 and m.x < 5 and m.y >= 0 and m.y < 5 then
-      local newIndex = m.y * 5 + m.x + 1
-      local newState = table_copy(state)
-      newState[index], newState[newIndex] = newState[newIndex], newState[index]
-      table.insert(neighbors, newState)
+    local neighbors = {}
+    local zeroIndex
+    for i = 1, 25 do
+        if state[i] == 0 then
+            zeroIndex = i
+            break
+        end
     end
-  end
-  return neighbors
+    local zx, zy = (zeroIndex - 1) % 5, math.floor((zeroIndex - 1) / 5)
+
+    local moves = {
+        {x = zx - 1, y = zy}, {x = zx + 1, y = zy},
+        {x = zx, y = zy - 1}, {x = zx, y = zy + 1}
+    }
+
+    for _, m in ipairs(moves) do
+        if m.x >= 0 and m.x < 5 and m.y >= 0 and m.y < 5 then
+            local swapIndex = m.y * 5 + m.x + 1
+            -- Swap in place
+            state[zeroIndex], state[swapIndex] = state[swapIndex], state[zeroIndex]
+
+            -- Make a single shallow copy of the modified state to store in neighbors
+            local neighbor = {}
+            for i = 1, 25 do neighbor[i] = state[i] end
+            table.insert(neighbors, neighbor)
+
+            -- Swap back
+            state[zeroIndex], state[swapIndex] = state[swapIndex], state[zeroIndex]
+        end
+    end
+
+    return neighbors
 end
 
 local function reconstruct_path(cameFrom, current)
@@ -188,6 +143,8 @@ return {get = function(bolt)
   local decoder = require("slider.puzzles")
 
   local goal = {1, 2, 3, 4, 5 , 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}
+
+  local goal_positions = build_goal_positions(goal)
 
   local digits, _, digitheight = bolt.createsurfacefrompng("images.digits")
   local digithalfwidth = 8
@@ -297,8 +254,14 @@ return {get = function(bolt)
           function (start, goal, bolt)
             local timestarted = bolt.time()
             -- print("solve start " .. table.getn(start) == table.getn(goal))
-            local openSet = FibHeap.new()
-            openSet:insert(manhattan(start, goal), start)
+            local openSet = BinHeap.new()
+
+            -- Track states in openSet with best fScore
+            local inOpenSet = {}
+            local startkey = serialize(start)
+            local startF = manhattan(start, goal_positions)
+            openSet:insert(startF, start)
+            inOpenSet[startkey] = startF
 
             local cameFrom = {}
             local gScore = {[serialize(start)] = 0}
@@ -327,12 +290,15 @@ return {get = function(bolt)
                   if not gScore[neighborKey] or tentative_gScore < gScore[neighborKey] then
                     cameFrom[neighborKey] = current
                     gScore[neighborKey] = tentative_gScore
-                    local fScore = tentative_gScore + manhattan(neighbor, goal)
-                    openSet:insert(fScore, neighbor)
+                      local fScore = tentative_gScore + manhattan(neighbor, goal_positions)
+                      if not inOpenSet[neighborKey] or fScore < inOpenSet[neighborKey] then
+                        openSet:insert(fScore, neighbor)
+                        inOpenSet[neighborKey] = fScore
+                      end
                   end
                 end
               end
-              if bolt.time() - timestarted >= 80000 then 
+              if bolt.time() - timestarted >= 50000 then 
                 -- print("pausing")
                 coroutine.yield()
                 -- print("resuming")
