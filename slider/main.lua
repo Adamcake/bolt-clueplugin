@@ -362,6 +362,10 @@ return {get = function(bolt)
                   end
                 end
               end
+              if gScore[currentKey] >= 30 then 
+                print("returning path early")
+                coroutine.yield(reconstruct_path(cameFrom, current))
+              end
               if bolt.time() - timestarted >= 50000 then 
                 -- print("pausing")
                 coroutine.yield()
@@ -417,18 +421,18 @@ return {get = function(bolt)
           return false 
         end
         if shallowtablecompare(currentstate, this.solution[this.solutionindex]) then 
-          return true 
+          return this.solution[this.solutionindex + 1]
         end
         for i=this.solutionindex, #this.solution do 
           if shallowtablecompare(currentstate, this.solution[i]) then 
             this.solutionindex = i 
-            return true
+            return this.solution[this.solutionindex + 1]
           end
         end
         for i=this.solutionindex, 1, -1 do 
           if shallowtablecompare(currentstate, this.solution[i]) then
             this.solutionindex = i
-           return true 
+           return true
           end
         end
         return false
