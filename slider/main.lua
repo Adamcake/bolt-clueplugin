@@ -81,7 +81,7 @@ local function build_goal_positions(goal)
   return positions
 end
 
-local function manhattan(state, goal_positions)
+local function manhattanu_old(state, goal_positions)
   local dist = 0
   for i = 1, 25 do
     local val = state[i]
@@ -93,6 +93,70 @@ local function manhattan(state, goal_positions)
   end
   return dist
 end
+
+local function manhattan(state, goal_positions)
+  local dist = 0
+
+  -- First compute Manhattan distance
+  for i = 1, 25 do
+    local val = state[i]
+    if val ~= 0 then
+      local x1, y1 = ((i - 1) % 5), math.floor((i - 1) / 5)
+      local gp = goal_positions[val]
+      dist = dist + math.abs(x1 - gp.x) + math.abs(y1 - gp.y)
+    end
+  end
+
+  -- Now add linear conflicts
+  -- Row conflicts
+  for row = 0, 4 do
+    for col1 = 0, 3 do
+      local i1 = row * 5 + col1 + 1
+      local v1 = state[i1]
+      if v1 ~= 0 then
+        local goal1 = goal_positions[v1]
+        if goal1.y == row then
+          for col2 = col1 + 1, 4 do
+            local i2 = row * 5 + col2 + 1
+            local v2 = state[i2]
+            if v2 ~= 0 then
+              local goal2 = goal_positions[v2]
+              if goal2.y == row and goal1.x > goal2.x then
+                dist = dist + 2
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  -- Column conflicts
+  for col = 0, 4 do
+    for row1 = 0, 3 do
+      local i1 = row1 * 5 + col + 1
+      local v1 = state[i1]
+      if v1 ~= 0 then
+        local goal1 = goal_positions[v1]
+        if goal1.x == col then
+          for row2 = row1 + 1, 4 do
+            local i2 = row2 * 5 + col + 1
+            local v2 = state[i2]
+            if v2 ~= 0 then
+              local goal2 = goal_positions[v2]
+              if goal2.x == col and goal1.y > goal2.y then
+                dist = dist + 2
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  return dist
+end
+
 
 local function get_neighbors(state)
     local neighbors = {}
@@ -382,6 +446,7 @@ return {get = function(bolt)
           if bolt.time() - this.lasttime > 1200000 then
             print("how long has it been...")
             this.isvalid = false
+            this.solver = nil
           end 
           return 
         end
@@ -389,6 +454,7 @@ return {get = function(bolt)
         local onscreen = imagetonumbers(this, event, firstvertex)
         if iscompleted(onscreen) then
           this.isvalid = false
+          this.solver = nil
           return
         end
         local stillsolved = false
