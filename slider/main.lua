@@ -202,6 +202,68 @@ local function reconstruct_path(cameFrom, current)
   return path
 end
 
+local function a_star(start, goal, bolt, goal_positions)
+  
+  return coroutine.create(
+    function ()
+      local timestarted = bolt.time()
+      local openSet = BinHeap.new()
+
+      -- Track states in openSet with best fScore
+      local inOpenSet = {}
+      local startkey = serialize(start)
+      local startF = manhattan(start, goal_positions)
+      openSet:insert(startF, start)
+      inOpenSet[startkey] = startF
+
+      local cameFrom = {}
+      local gScore = {[serialize(start)] = 0}
+      local gScore0 = 0
+      local visited = {}
+
+      while openSet.n > 0 do
+        local current, _ = openSet:extract_min()
+        local currentKey = serialize(current)
+
+        if currentKey == serialize(goal) then
+          coroutine.yield(reconstruct_path(cameFrom, current), true)
+        end
+
+        visited[currentKey] = true
+        for _, neighbor in ipairs(get_neighbors(current)) do
+          local neighborKey = serialize(neighbor)
+          if not visited[neighborKey] then 
+            local tentative_gScore = gScore[currentKey] + 1
+            if not gScore[neighborKey] or tentative_gScore < gScore[neighborKey] then
+              cameFrom[neighborKey] = current
+              gScore[neighborKey] = tentative_gScore
+                local fScore = tentative_gScore + manhattan(neighbor, goal_positions)
+                if not inOpenSet[neighborKey] or fScore < inOpenSet[neighborKey] then
+                  openSet:insert(fScore, neighbor)
+                  inOpenSet[neighborKey] = fScore
+                end
+            end
+          end
+        end
+        if gScore[currentKey] - gScore0 >= 30 + math.floor(gScore0 / 2) then 
+          print("returning path early")
+          coroutine.yield(reconstruct_path(cameFrom, current), false)
+          print("continuing")
+          gScore0 = gScore[currentKey]
+        end
+        if bolt.time() - timestarted >= 50000 then 
+          print("pausing on time")
+          coroutine.yield(nil, false)
+          print("resuming")
+          timestarted = bolt.time()
+        end
+      end
+      print("ended in disarray")
+    end
+  )
+end
+
+
 return {get = function(bolt)
 
   local decoder = require("slider.puzzles")
@@ -311,79 +373,10 @@ return {get = function(bolt)
 
       local function solve(this)
         if this.issolved then return this.solution end
-        -- this.issolved = true
 
-        -- print("new solver")
-        this.solver = coroutine.create(
-          function (start, goal, bolt)
-            local timestarted = bolt.time()
-            -- print("solve start " .. table.getn(start) == table.getn(goal))
-            local openSet = BinHeap.new()
+        print("new solver")
+        this.solver = a_star(this.state, goal, bolt, goal_positions)
 
-            -- Track states in openSet with best fScore
-            local inOpenSet = {}
-            local startkey = serialize(start)
-            local startF = manhattan(start, goal_positions)
-            openSet:insert(startF, start)
-            inOpenSet[startkey] = startF
-
-            local cameFrom = {}
-            local gScore = {[serialize(start)] = 0}
-            local visited = {}
-
-            while openSet.n > 0 do
-              local current, _ = openSet:extract_min()
-              -- if manhattan(current, goal) == 0 then
-              --   print("manhattan 0")
-              --   return reconstruct_path(cameFrom, current)
-              -- end
-              local currentKey = serialize(current)
-
-              if currentKey == serialize(goal) then
-                -- print("\"returning\"")
-                coroutine.yield(reconstruct_path(cameFrom, current))
-                -- return reconstruct_path(cameFrom, current)
-              end
-
-              visited[currentKey] = true
-              -- print("visited "..  currentKey)
-              for _, neighbor in ipairs(get_neighbors(current)) do
-                local neighborKey = serialize(neighbor)
-                if not visited[neighborKey] then 
-                  local tentative_gScore = gScore[currentKey] + 1
-                  if not gScore[neighborKey] or tentative_gScore < gScore[neighborKey] then
-                    cameFrom[neighborKey] = current
-                    gScore[neighborKey] = tentative_gScore
-                      local fScore = tentative_gScore + manhattan(neighbor, goal_positions)
-                      if not inOpenSet[neighborKey] or fScore < inOpenSet[neighborKey] then
-                        openSet:insert(fScore, neighbor)
-                        inOpenSet[neighborKey] = fScore
-                      end
-                  end
-                end
-              end
-              if gScore[currentKey] >= 30 then 
-                print("returning path early")
-                coroutine.yield(reconstruct_path(cameFrom, current))
-              end
-              if bolt.time() - timestarted >= 50000 then 
-                -- print("pausing")
-                coroutine.yield()
-                -- print("resuming")
-                timestarted = bolt.time()
-              end -- too many iterations??
-            end
-            print("ended in disarray")
-            -- return nil -- No solution found
-          end
-
-        )
-        _, this.solution = coroutine.resume(this.solver, this.state, goal, bolt)
-        -- print(this.solver)
-        -- print("co status : " .. coroutine.status(this.solver))
-        -- this.solutionindex = 1
-        this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
-        if this.issolved then this.solutionindex = 1 end
 
       end
 
@@ -417,24 +410,30 @@ return {get = function(bolt)
       end
 
       local function isstillsolved(this, currentstate)
+        print("is still solved enter")
         if this.solution == nil or #this.solution < 1 then 
+          print("this solution is hollow")
           return false 
         end
         if shallowtablecompare(currentstate, this.solution[this.solutionindex]) then 
+          print("is still solved 1")
           return this.solution[this.solutionindex + 1]
         end
         for i=this.solutionindex, #this.solution do 
           if shallowtablecompare(currentstate, this.solution[i]) then 
+            print("is still solved 2")
             this.solutionindex = i 
             return this.solution[this.solutionindex + 1]
           end
         end
         for i=this.solutionindex, 1, -1 do 
           if shallowtablecompare(currentstate, this.solution[i]) then
+            print("is still solved 3")
             this.solutionindex = i
            return true
           end
         end
+        print("is not still solved")
         return false
       end
 
@@ -464,11 +463,24 @@ return {get = function(bolt)
         local stillsolved = false
         if onscreen ~= nil and onscreen[1] ~= nil then 
           stillsolved = isstillsolved(this, onscreen) 
-          if this.issolved ~= nil and not stillsolved then 
+          -- print ("issolved = " .. tostring(this.issolved))
+          if not stillsolved and not shallowtablecompare(this.solvingstate, onscreen) then 
+            print("if is solved nil finished is " .. tostring(this.finished))
+            this.issolved = false
             this.solver = nil 
             this.issolved = nil
+            this.finished = false
           end
         end 
+        if this.solver and not this.finished then
+          print("trying to resume")
+          local newsolution
+          _, newsolution, this.finished = coroutine.resume(this.solver)
+          if newsolution and type(newsolution) == "table" and newsolution[1] then 
+            this.solution = newsolution
+          end
+          print(this.finished)
+        end
         if onscreen ~= nil and onscreen[1] ~= nil and ((not this.issolved and not stillsolved) or serialize(onscreen) ~= serialize(this.state)) then
             this.state = onscreen
             this.statelength = #onscreen
@@ -479,18 +491,26 @@ return {get = function(bolt)
               if this.solver == nil then 
                 this.solution = {}
                 solve(this)
-              else
-                _, this.solution = coroutine.resume(this.solver)
-                -- print(this.solver)
-                -- print("co status : " .. coroutine.status(this.solver))
-                this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
-                if this.issolved then this.solutionindex = 1 end
-              end -- this.solver == nil
+                this.solvingstate = this.state
+              end -- this.solve == nil
+              local newsolution
+              _, newsolution, this.finished = coroutine.resume(this.solver)
+              if newsolution and type(newsolution) == "table" and newsolution[1] then 
+                this.solution = newsolution
+              end
+              -- _, this.solution, this.finished  = coroutine.resume(this.solver)
+              -- print(this.solver)
+              -- print("co status : " .. coroutine.status(this.solver))
+              this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
+              if this.issolved then this.solutionindex = 1 end
             end -- not issolved
         end -- onscreen ~=nil and .. 
         if iscorrectevent(this, event, firstvertex) then
           if this.issolved and this.solution and this.solution[this.solutionindex + 1] then
-            this.solver = nil
+            if this.finished then
+              -- print("if is solved finished is " .. tostring(this.finished))
+              this.solver = nil
+            end
             for h=1,4 do 
               drawstep(this, event, h)
             end -- forh
@@ -516,11 +536,12 @@ return {get = function(bolt)
         statelength = 0,
         solution = {},
         solutionindex = 0,
-        solutionstate = {},
+        solvingstate = {},
         issolved = false,
         leftmostx = 0,
         solver = nil,
         lasttime = nil,
+        finished = false,
 
         valid = valid,
         onrender2d = onrender2d,
