@@ -164,6 +164,7 @@ local clues = {
   ["Generally speaking, his nose was very bent."] = {},
   ["His head might be hollow, but the crates nearby are filled with surprises."] = {},
   ["I am a token of the greatest love. I have no beginning or end. My eye is red, I can fit like a glove. Go to the place where it's money they lend, And dig by the gate to be my friend."] = {},
+  ["I am head of the abbey with a cold breeze from the west."] = {},
   ["I'm sure they will let ya buy some things here, as long as you are in good 'ealth"] = {},
   ["Identify the back of this over-acting brother. (He's a long way from home.)"] = {},
   ["If a man carried my burden, he would break his back. I am not rich, but leave silver in my track. Speak to the keeper of my trail."] = {},
