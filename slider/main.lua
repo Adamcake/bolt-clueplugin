@@ -81,19 +81,6 @@ local function build_goal_positions(goal)
   return positions
 end
 
-local function manhattanu_old(state, goal_positions)
-  local dist = 0
-  for i = 1, 25 do
-    local val = state[i]
-    if val ~= 0 then
-      local x1, y1 = ((i - 1) % 5), math.floor((i - 1) / 5)
-      local gp = goal_positions[val]
-      dist = dist + math.abs(x1 - gp.x) + math.abs(y1 - gp.y)
-    end
-  end
-  return dist
-end
-
 local function manhattan(state, goal_positions)
   local dist = 0
 
@@ -245,20 +232,20 @@ local function a_star(start, goal, bolt, goal_positions)
             end
           end
         end
-        if gScore[currentKey] - gScore0 >= 30 + math.floor(gScore0 / 2) then 
-          print("returning path early")
+        if gScore[currentKey] - gScore0 >= 30 + math.floor(gScore0 / 2) then
+          --print("returning path early")
           coroutine.yield(reconstruct_path(cameFrom, current), false)
-          print("continuing")
+          --print("continuing")
           gScore0 = gScore[currentKey]
         end
         if bolt.time() - timestarted >= 50000 then 
-          print("pausing on time")
+          --print("pausing on time")
           coroutine.yield(nil, false)
-          print("resuming")
+          --print("resuming")
           timestarted = bolt.time()
         end
       end
-      print("ended in disarray")
+      --print("ended in disarray")
     end
   )
 end
@@ -297,12 +284,6 @@ return {get = function(bolt)
     create = function (event, firstvertex)
       local verticesperimage = event:verticesperimage()
 
-      local function printstate(state) 
-        for i = 1, 25, 5 do
-          print(state[i] .. " " .. state[i+1] .. " " .. state[i+2] .. " " .. state[i+3] .. " " .. state[i+4])
-        end
-      end
-
       local function imagetonumbers (this, event, firstvertex)
         local state = {}
         local statelength = 0
@@ -331,7 +312,6 @@ return {get = function(bolt)
 
               local x = math.floor((currentx - this.leftmostx) / objectsize) +1
               local y = math.floor((currenty - firstpositiony) / objectsize) +1
-              -- print("we're at "..x..", "..y)
               rows[y] = rows[y] + 1
               cols[x] = cols[x] +  1
 
@@ -353,7 +333,6 @@ return {get = function(bolt)
           end
 
           local holeposition = (shortrow-1) * 5 + shortcol
-          -- print(holeposition)
 
           for i = #state, holeposition, -1 do 
             state[i+1] = state[i]
@@ -362,8 +341,6 @@ return {get = function(bolt)
 
         end
 
-        -- printstate(state)
-        -- print("\n")
         return state
       end
 
@@ -374,7 +351,7 @@ return {get = function(bolt)
       local function solve(this)
         if this.issolved then return this.solution end
 
-        print("new solver")
+        --print("new solver")
         this.solver = a_star(this.state, goal, bolt, goal_positions)
 
 
@@ -386,7 +363,6 @@ return {get = function(bolt)
           for i = 1, 25 do
             if this.solution[this.solutionindex  + h][i] == 0 then index = i break end
           end -- fori
-          -- print(index)
           local x, y = event:vertexxy(firstvertex)
           local newx = this.leftmostx + ((index-1) % 5 ) * (objectsize + 4) - objecthalfsize
           local newy = y + math.floor((index-1) / 5 ) * (objectsize + 8 ) - objecthalfsize
@@ -410,30 +386,24 @@ return {get = function(bolt)
       end
 
       local function isstillsolved(this, currentstate)
-        print("is still solved enter")
-        if this.solution == nil or #this.solution < 1 then 
-          print("this solution is hollow")
+        if this.solution == nil or #this.solution < 1 then
           return false 
         end
-        if shallowtablecompare(currentstate, this.solution[this.solutionindex]) then 
-          print("is still solved 1")
+        if shallowtablecompare(currentstate, this.solution[this.solutionindex]) then
           return this.solution[this.solutionindex + 1]
         end
         for i=this.solutionindex, #this.solution do 
-          if shallowtablecompare(currentstate, this.solution[i]) then 
-            print("is still solved 2")
+          if shallowtablecompare(currentstate, this.solution[i]) then
             this.solutionindex = i 
             return this.solution[this.solutionindex + 1]
           end
         end
         for i=this.solutionindex, 1, -1 do 
           if shallowtablecompare(currentstate, this.solution[i]) then
-            print("is still solved 3")
             this.solutionindex = i
            return true
           end
         end
-        print("is not still solved")
         return false
       end
 
@@ -445,9 +415,8 @@ return {get = function(bolt)
         if this.lasttime == nil then
           this.lasttime = bolt.time()
         end
-        if not iscorrectevent(this, event, firstvertex) then 
+        if not iscorrectevent(this, event, firstvertex) then
           if bolt.time() - this.lasttime > 1200000 then
-            print("how long has it been...")
             this.isvalid = false
             this.solver = nil
           end 
@@ -463,9 +432,7 @@ return {get = function(bolt)
         local stillsolved = false
         if onscreen ~= nil and onscreen[1] ~= nil then 
           stillsolved = isstillsolved(this, onscreen) 
-          -- print ("issolved = " .. tostring(this.issolved))
-          if not stillsolved and not shallowtablecompare(this.solvingstate, onscreen) then 
-            print("if is solved nil finished is " .. tostring(this.finished))
+          if not stillsolved and not shallowtablecompare(this.solvingstate, onscreen) then
             this.issolved = false
             this.solver = nil 
             this.issolved = nil
@@ -473,13 +440,12 @@ return {get = function(bolt)
           end
         end 
         if this.solver and not this.finished then
-          print("trying to resume")
+          --print("trying to resume")
           local newsolution
           _, newsolution, this.finished = coroutine.resume(this.solver)
           if newsolution and type(newsolution) == "table" and newsolution[1] then 
             this.solution = newsolution
           end
-          print(this.finished)
         end
         if onscreen ~= nil and onscreen[1] ~= nil and ((not this.issolved and not stillsolved) or serialize(onscreen) ~= serialize(this.state)) then
             this.state = onscreen
@@ -498,9 +464,6 @@ return {get = function(bolt)
               if newsolution and type(newsolution) == "table" and newsolution[1] then 
                 this.solution = newsolution
               end
-              -- _, this.solution, this.finished  = coroutine.resume(this.solver)
-              -- print(this.solver)
-              -- print("co status : " .. coroutine.status(this.solver))
               this.issolved = this.solution and type(this.solution) == "table" and #this.solution > 0
               if this.issolved then this.solutionindex = 1 end
             end -- not issolved
@@ -508,7 +471,6 @@ return {get = function(bolt)
         if iscorrectevent(this, event, firstvertex) then
           if this.issolved and this.solution and this.solution[this.solutionindex + 1] then
             if this.finished then
-              -- print("if is solved finished is " .. tostring(this.finished))
               this.solver = nil
             end
             for h=1,4 do 
