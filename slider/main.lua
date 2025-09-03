@@ -5,7 +5,7 @@ local BinHeap = {}
 BinHeap.__index = BinHeap
 
 function BinHeap.new()
-    return setmetatable({keys = {}, values = {}, n = 0}, BinHeap)
+  return setmetatable({keys = {}, values = {}, n = 0}, BinHeap)
 end
 
 local function parent(i) return math.floor(i / 2) end
@@ -13,61 +13,61 @@ local function left(i) return i * 2 end
 local function right(i) return i * 2 + 1 end
 
 function BinHeap:insert(key, value)
-    self.n = self.n + 1
-    local i = self.n
-    self.keys[i] = key
-    self.values[i] = value
+  self.n = self.n + 1
+  local i = self.n
+  self.keys[i] = key
+  self.values[i] = value
 
-    -- sift up
-    while i > 1 do
-        local p = parent(i)
-        if self.keys[p] <= self.keys[i] then break end
-        self.keys[p], self.keys[i] = self.keys[i], self.keys[p]
-        self.values[p], self.values[i] = self.values[i], self.values[p]
-        i = p
-    end
+  -- sift up
+  while i > 1 do
+    local p = parent(i)
+    if self.keys[p] <= self.keys[i] then break end
+    self.keys[p], self.keys[i] = self.keys[i], self.keys[p]
+    self.values[p], self.values[i] = self.values[i], self.values[p]
+    i = p
+  end
 end
 
 function BinHeap:extract_min()
-    if self.n == 0 then return nil, nil end
-    local rootKey = self.keys[1]
-    local rootValue = self.values[1]
-    local lastKey = self.keys[self.n]
-    local lastValue = self.values[self.n]
-    self.keys[self.n] = nil
-    self.values[self.n] = nil
-    self.n = self.n - 1
+  if self.n == 0 then return nil, nil end
+  local rootKey = self.keys[1]
+  local rootValue = self.values[1]
+  local lastKey = self.keys[self.n]
+  local lastValue = self.values[self.n]
+  self.keys[self.n] = nil
+  self.values[self.n] = nil
+  self.n = self.n - 1
 
-    if self.n > 0 then
-        self.keys[1] = lastKey
-        self.values[1] = lastValue
+  if self.n > 0 then
+    self.keys[1] = lastKey
+    self.values[1] = lastValue
 
-        local i = 1
-        while true do
-            local l, r = left(i), right(i)
-            local smallest = i
-            if l <= self.n and self.keys[l] < self.keys[smallest] then
-                smallest = l
-            end
-            if r <= self.n and self.keys[r] < self.keys[smallest] then
-                smallest = r
-            end
-            if smallest == i then break end
-            self.keys[i], self.keys[smallest] = self.keys[smallest], self.keys[i]
-            self.values[i], self.values[smallest] = self.values[smallest], self.values[i]
-            i = smallest
-        end
+    local i = 1
+    while true do
+      local l, r = left(i), right(i)
+      local smallest = i
+      if l <= self.n and self.keys[l] < self.keys[smallest] then
+        smallest = l
+      end
+      if r <= self.n and self.keys[r] < self.keys[smallest] then
+        smallest = r
+      end
+      if smallest == i then break end
+      self.keys[i], self.keys[smallest] = self.keys[smallest], self.keys[i]
+      self.values[i], self.values[smallest] = self.values[smallest], self.values[i]
+      i = smallest
     end
+  end
 
-    return rootValue, rootKey
+  return rootValue, rootKey
 end
 
 local function serialize(state)
-    local chars = {}
-    for i = 1, 25 do
-        chars[i] = string.char(state[i])
-    end
-    return table.concat(chars)
+  local chars = {}
+  for i = 1, 25 do
+    chars[i] = string.char(state[i])
+  end
+  return table.concat(chars)
 end
 
 -- Precompute goal positions (value -> {x,y})
@@ -146,38 +146,38 @@ end
 
 
 local function get_neighbors(state)
-    local neighbors = {}
-    local zeroIndex
-    for i = 1, 25 do
-        if state[i] == 0 then
-            zeroIndex = i
-            break
-        end
+  local neighbors = {}
+  local zeroIndex
+  for i = 1, 25 do
+    if state[i] == 0 then
+      zeroIndex = i
+      break
     end
-    local zx, zy = (zeroIndex - 1) % 5, math.floor((zeroIndex - 1) / 5)
+  end
+  local zx, zy = (zeroIndex - 1) % 5, math.floor((zeroIndex - 1) / 5)
 
-    local moves = {
-        {x = zx - 1, y = zy}, {x = zx + 1, y = zy},
-        {x = zx, y = zy - 1}, {x = zx, y = zy + 1}
-    }
+  local moves = {
+    {x = zx - 1, y = zy}, {x = zx + 1, y = zy},
+    {x = zx, y = zy - 1}, {x = zx, y = zy + 1}
+  }
 
-    for _, m in ipairs(moves) do
-        if m.x >= 0 and m.x < 5 and m.y >= 0 and m.y < 5 then
-            local swapIndex = m.y * 5 + m.x + 1
-            -- Swap in place
-            state[zeroIndex], state[swapIndex] = state[swapIndex], state[zeroIndex]
+  for _, m in ipairs(moves) do
+    if m.x >= 0 and m.x < 5 and m.y >= 0 and m.y < 5 then
+      local swapIndex = m.y * 5 + m.x + 1
+      -- Swap in place
+      state[zeroIndex], state[swapIndex] = state[swapIndex], state[zeroIndex]
 
-            -- Make a single shallow copy of the modified state to store in neighbors
-            local neighbor = {}
-            for i = 1, 25 do neighbor[i] = state[i] end
-            table.insert(neighbors, neighbor)
+      -- Make a single shallow copy of the modified state to store in neighbors
+      local neighbor = {}
+      for i = 1, 25 do neighbor[i] = state[i] end
+      table.insert(neighbors, neighbor)
 
-            -- Swap back
-            state[zeroIndex], state[swapIndex] = state[swapIndex], state[zeroIndex]
-        end
+      -- Swap back
+      state[zeroIndex], state[swapIndex] = state[swapIndex], state[zeroIndex]
     end
+  end
 
-    return neighbors
+  return neighbors
 end
 
 local function reconstruct_path(cameFrom, current)
@@ -190,7 +190,6 @@ local function reconstruct_path(cameFrom, current)
 end
 
 local function a_star(start, goal, bolt, goal_positions)
-  
   return coroutine.create(
     function ()
       local timestarted = bolt.time()
