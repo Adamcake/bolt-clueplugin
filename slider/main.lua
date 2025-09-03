@@ -294,7 +294,7 @@ return {get = function(bolt)
   end
 
   return {
-    create = function (event, firstvertex, x, y, x2, y2)
+    create = function (event, firstvertex)
       local verticesperimage = event:verticesperimage()
 
       local function printstate(state) 
