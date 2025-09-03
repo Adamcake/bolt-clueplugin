@@ -42,6 +42,15 @@ bolt.onrenderbigicon(function (event)
     return
   end
 
+  if nextbigiconismap then
+    nextbigiconismap = false
+    local object = static:trycreatefrombigicon(event)
+    if object then
+      print(string.format("map clue: %s", object.text))
+      -- todo
+    end
+  end
+
   if not lastrenderscroll and event:modelcount() == 1 and event:modelvertexcount(1) == 552 then
     -- the scroll object shown in the "minigames" UI element for some clue types
     local x0, y0, z0 = event:modelvertexpoint(1, 1):get()

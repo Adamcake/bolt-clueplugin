@@ -7,15 +7,22 @@
 -- the case of a map, it bases it on the first bigicon to get drawn.
 
 local text = require("static.text")
+local map = require("static.map")
 
 return {
   get = function (bolt)
     local t = text.get(bolt)
+    local m = map.get(bolt)
     return {
       textdata = t,
+      mapdata = m,
 
       trycreatefromtext = function (this, event, backgroundindex)
         return this.textdata:lookup(event, backgroundindex)
+      end,
+
+      trycreatefrombigicon = function (this, event)
+        return this.mapdata:lookup(event)
       end,
     }
   end
