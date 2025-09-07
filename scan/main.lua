@@ -14,7 +14,7 @@ return {get = function(bolt)
     "out highp vec4 col;"..
     "layout(location=0) uniform float factor;"..
     "void main() {"..
-      "float angle = (atan(vpos.y, vpos.x) / radians(360)) + 0.25;"..
+      "float angle = (atan(vpos.y, vpos.x) / radians(360.0)) + 0.25;"..
       "angle = mix(angle + 1.0, angle, step(0.0, angle));"..
       "float distfactor = 1.0 - ((abs(1.0 - (length(vpos) / 0.85)) * 25.0) - 1.5);"..
       "float anglefactor = step(angle, clamp(factor, 0.0, 1.0));"..
