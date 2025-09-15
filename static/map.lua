@@ -5,8 +5,27 @@ local grey = { r = 150, g = 150, b = 150 }
 local clues = {
   -- hard
   dwf = { text = "[map: search a crate in the centre of the dark warriors' fortress]" },
-  fortforinthry = { text = "[map: search a crate outside the gate of fort forinthry]" },
-  legendsguild = { text = "[map: dig near some benches outside the legends' guild]" },
+  fortforinthry = {
+    text = "[map: search a crate outside the gate of fort forinthry]",
+    x = 3312,
+    y = 3528,
+    level = 0,
+    radius = 1,
+    indicators = {
+      { type = "line", col = yellow, x1 = 3293, y1 = 3544, x2 = 3303, y2 = 3534, h1 = 713, h2 = 473 },
+      { type = "line", col = blue, x1 = 3303, y1 = 3534, x2 = 3311, y2 = 3526, h1 = 473, h2 = 705 },
+      { type = "line", col = grey, x1 = 3311, y1 = 3526, x2 = 3311, y2 = 3527, h1 = 705, h2 = 649 },
+      { type = "line", col = grey, x1 = 3311, y1 = 3527, x2 = 3312, y2 = 3527, h1 = 649, h2 = 665 },
+    },
+  },
+  legendsguild = {
+    text = "[map: dig near some benches outside the legends' guild]",
+    indicators = {
+      { type = "line", col = yellow, x1 = 2728, y1 = 3346, x2 = 2722, y2 = 3338, h1 = 2177, h2 = 1073 },
+      { type = "arrow", x = 2722, y = 3338, h = 2273 },
+      { type = "dig", x = 2722, y = 3338, h = 2673 },
+    },
+  },
   observatory = {
     text = "[map: search a crate in a house northeast of the observatory]",
     x = 2457,
@@ -24,8 +43,39 @@ local clues = {
     },
   },
   threevolcanoes = { text = "[map: dig between three small volcanoes in the wilderness]" },
-  westardougne = { text = "[map: dig in a house in west ardougne]" },
-  yanillecorner = { text = "[map: dig behind a house in the southeast corner of yanille]" },
+  westardougne = {
+    text = "[map: dig in a house in west ardougne]",
+    x = 2488,
+    y = 3308,
+    level = 0,
+    radius = 2,
+    indicators = {
+      { type = "line", col = grey, x1 = 2538, y1 = 3306, x2 = 2536, y2 = 3306, h1 = 1233, h2 = 1209 },
+      { type = "line", col = blue, x1 = 2536, y1 = 3306, x2 = 2526, y2 = 3306, h1 = 1209, h2 = 1193 },
+      { type = "line", col = grey, x1 = 2526, y1 = 3306, x2 = 2510, y2 = 3302, h1 = 1193, h2 = 1305 },
+      { type = "line", col = grey, x1 = 2510, y1 = 3302, x2 = 2508, y2 = 3302, h1 = 1305, h2 = 1305 },
+      { type = "line", col = blue, x1 = 2508, y1 = 3302, x2 = 2498, y2 = 3302, h1 = 1305, h2 = 1161 },
+      { type = "line", col = yellow, x1 = 2498, y1 = 3302, x2 = 2488, y2 = 3309, h1 = 1161, h2 = 1145 },
+      { type = "arrow", x = 2488, y = 3308, h = 2325 },
+      { type = "dig", x = 2488, y = 3308, h = 2725 },
+    },
+  },
+  yanillecorner = {
+    text = "[map: dig behind a house in the southeast corner of yanille]",
+    x = 2616,
+    y = 3077,
+    level = 0,
+    radius = 2,
+    indicators = {
+      { type = "line", col = grey, x1 = 2575, y1 = 3089, x2 = 2582, y2 = 3096, h1 = 1001, h2 = 985 },
+      { type = "line", col = grey, x1 = 2582, y1 = 3096, x2 = 2587, y2 = 3096, h1 = 985, h2 = 985 },
+      { type = "line", col = blue, x1 = 2587, y1 = 3096, x2 = 2597, y2 = 3096, h1 = 985, h2 = 985 },
+      { type = "line", col = yellow, x1 = 2597, y1 = 3096, x2 = 2607, y2 = 3086, h1 = 985, h2 = 985 },
+      { type = "line", col = blue, x1 = 2607, y1 = 3086, x2 = 2615, y2 = 3078, h1 = 985, h2 = 985 },
+      { type = "arrow", x = 2616, y = 3077, h = 2165 },
+      { type = "dig", x = 2616, y = 3077, h = 2565 },
+    },
+  },
 }
 
 local lookupbyvertexcount = {

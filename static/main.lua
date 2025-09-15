@@ -169,6 +169,15 @@ return {
         drawicon(this, event, indicator, arrow, arrowwidth, arrowheight, 2.5)
       end,
 
+      up = function (this, event, indicator)
+        drawicon(this, event, indicator, arrow, arrowwidth, arrowheight, -1.5)
+      end,
+
+      topfloor = function (this, event, indicator)
+        drawiconwithpositions(this, event, indicator.x, indicator.h, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, arrow, arrowwidth, arrowheight, -1.5)
+        drawiconwithpositions(this, event, indicator.x, indicator.h + 200, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, arrow, arrowwidth, arrowheight, -1.5)
+      end,
+
       model = function (this, event, indicator)
         if indicator.point == nil then return end
         local x, y, z = indicator.point:get()
