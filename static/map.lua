@@ -21,6 +21,10 @@ local clues = {
   },
   legendsguild = {
     text = "[map: dig near some benches outside the legends' guild]",
+    x = 2722,
+    y = 3338,
+    level = 0,
+    radius = 2,
     indicators = {
       { type = "line", col = yellow, x1 = 2728, y1 = 3346, x2 = 2722, y2 = 3338, h1 = 2177, h2 = 1073 },
       { type = "arrow", x = 2722, y = 3338, h = 2273 },

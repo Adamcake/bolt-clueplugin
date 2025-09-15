@@ -48,7 +48,20 @@ local clues = {
       { type = "model", vertices = 8784, x1 = 82, y1 = 463, z1 = -94, h = 1000, anim = true, speech = true },
     },
   },
-  ["This anagram reveals who to speak to next: AN PAINT TONIC"] = {},
+  ["This anagram reveals who to speak to next: AN PAINT TONIC"] = {
+    x = 2869,
+    y = 9877,
+    level = 0,
+    radius = 1,
+    indicators = {
+      { type = "arrow", x = 2879.5, y = 3459, h = 2337 },
+      -- travel into tunnel
+      { type = "line", col = grey, x1 = 2875, y1 = 9880, x2 = 2873, y2 = 9880, h1 = 665, h2 = 665 },
+      { type = "line", col = yellow, x1 = 2873, y1 = 9880, x2 = 2863, y2 = 9881, h1 = 665, h2 = 665 },
+      { type = "line", col = grey, x1 = 2863, y1 = 9881, x2 = 2868, y2 = 9877, h1 = 665, h2 = 665 },
+      { type = "model", vertices = 3975, x1 = 108, y1 = 236, z1 = 0, h = 950, anim = true, speech = true },
+    },
+  },
   ["This anagram reveals who to speak to next: ARR! SO I AM A CRUST, AND?"] = {},
   ["This anagram reveals who to speak to next: BY LOOK"] = {},
   ["This anagram reveals who to speak to next: C ON GAME HOC"] = {},
@@ -419,7 +432,25 @@ local clues = {
     },
   },
   ["18 degrees 03 minutes north 25 degrees 16 minutes east"] = {},
-  ["18 degrees 22 minutes north 16 degrees 33 minutes east"] = {},
+  ["18 degrees 22 minutes north 16 degrees 33 minutes east"] = {
+    x = 2970,
+    y = 3749,
+    level = 0,
+    radius = 2,
+    indicators = {
+      { type = "line", col = grey, x1 = 2968, y1 = 3696, x2 = 2968, y2 = 3710, h1 = 865, h2 = 833 },
+      { type = "line", col = grey, x1 = 2968, y1 = 3710, x2 = 2967, y2 = 3711, h1 = 833, h2 = 1001 },
+      { type = "line", col = blue, x1 = 2967, y1 = 3711, x2 = 2957, y2 = 3721, h1 = 1001, h2 = 657 },
+      { type = "line", col = yellow, x1 = 2957, y1 = 3721, x2 = 2967, y2 = 3731, h1 = 657, h2 = 657 },
+      { type = "line", col = grey, x1 = 2967, y1 = 3731, x2 = 2970, y2 = 3732, h1 = 657, h2 = 705 },
+      { type = "line", col = grey, x1 = 2970, y1 = 3732, x2 = 2970, y2 = 3733, h1 = 705, h2 = 649 },
+      { type = "line", col = blue, x1 = 2970, y1 = 3733, x2 = 2970, y2 = 3743, h1 = 649, h2 = 241 },
+      { type = "line", col = grey, x1 = 2970, y1 = 3743, x2 = 2969, y2 = 3743, h1 = 241, h2 = 209 },
+      { type = "line", col = grey, x1 = 2969, y1 = 3743, x2 = 2969, y2 = 3748, h1 = 209, h2 = 273 },
+      { type = "arrow", x = 2970, y = 3749, h = 1473 },
+      { type = "dig", x = 2970, y = 3749, h = 1873 },
+    },
+  },
   ["19 degrees 43 minutes north 25 degrees 07 minutes east"] = {},
   ["20 degrees 05 minutes north 21 degrees 52 minutes east"] = {},
   ["20 degrees 07 minutes north 18 degrees 33 minutes east"] = {},
@@ -550,7 +581,15 @@ local clues = {
   ["Covered in shadows, the centre of the circle is where you will find the answer."] = {},
   ["Four blades I have, yet draw no blood; Still I turn my prey to powder. If you are brave, come search my roof; It is there my blades are louder."] = {},
   ["Generally speaking, his nose was very bent."] = {},
-  ["His head might be hollow, but the crates nearby are filled with surprises."] = {},
+  ["His head might be hollow, but the crates nearby are filled with surprises."] = {
+    x = 3478,
+    y = 3091,
+    level = 0,
+    radius = 1,
+    indicators = {
+      { type = "arrow", x = 3478, y = 3091, h = 1545 },
+    },
+  },
   ["I am a token of the greatest love. I have no beginning or end. My eye is red, I can fit like a glove. Go to the place where it's money they lend, And dig by the gate to be my friend."] = {
     x = 3191,
     y = 9825,
@@ -607,7 +646,17 @@ local clues = {
   ["My home is grey, and made of stone; A castle with a search for a meal. Hidden in some drawers I am, across from a wooden wheel."] = {},
   ["My name is like a tree, yet it is spelt with a 'g', come see the fur which is right near me."] = {},
   ["Navigating to this crate will be a trial."] = {},
-  ["Often sought out by scholars of histories past, find me where words of wisdom speak volumes."] = {},
+  ["Often sought out by scholars of histories past, find me where words of wisdom speak volumes."] = {
+    x1 = 3351,
+    y1 = 3342,
+    x2 = 3359,
+    y2 = 3349,
+    level = 0,
+    indicators = {
+      { type = "model", vertices = 4215, x1 = -26, y1 = 25, z1 = -28, h = 1200, anim = true, speech = true },
+      { type = "model", vertices = 4281, x1 = -26, y1 = 25, z1 = -28, h = 1200, anim = true, speech = true },
+    },
+  },
   ["Probably filled with books on magic."] = {
     x1 = 3094,
     y1 = 3152,
@@ -625,6 +674,8 @@ local clues = {
   ["The beasts to my east snap claws and tails, The rest to my west can slide and eat fish. The force to my north will jump and they'll wail, Come dig by my fire and make a wish."] = {},
   ["The cheapest water for miles around, but they react badly to religious icons."] = {},
   ["There is no 'worthier' lord."] = {
+    x = 2186,
+    y = 3284,
     level = 1,
     radius = 1,
     indicators = {
@@ -651,7 +702,21 @@ local clues = {
       { type = "arrow", x = 2833, y = 2991.5, h = 2337 },
     },
   },
-  ["Throat mage seeks companionship. Seek answers inside my furniture if interested."] = {},
+  ["'Throat mage seeks companionship. Seek answers inside my furniture if interested.'"] = {
+    x = 2666,
+    y = 3238,
+    level = 1,
+    radius = 1,
+    indicators = {
+      { type = "line", col = yellow, x1 = 2658, y1 = 3230, x2 = 2664, y2 = 3240, h1 = 1209, h2 = 3217 },
+      { type = "line", col = grey, x1 = 2664, y1 = 3240, x2 = 2667, y2 = 3240, h1 = 3217, h2 = 3385 },
+      { type = "line", col = grey, x1 = 2667, y1 = 3240, x2 = 2668, y2 = 3243, h1 = 3385, h2 = 3385 },
+      { type = "up", x = 2668, y = 3243.5, h = 4385 },
+      -- travel up stairs
+      { type = "line", col = grey, x1 = 2668, y1 = 3243, x2 = 2667, y2 = 3238, h1 = 4889, h2 = 4889 },
+      { type = "arrow", x = 2666, y = 3238, h = 5789 }
+    },
+  },
   ["Try not to let yourself be dazzled when you search these drawers."] = {
     x = 2561,
     y = 3323,
