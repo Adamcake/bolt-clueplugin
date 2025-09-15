@@ -209,7 +209,7 @@ local clues = {
       { type = "line", col = yellow, x1 = 3086, y1 = 3495, x2 = 3078, y2 = 3503, h1 = 1689, h2 = 1705 },
       { type = "line", col = blue, x1 = 3078, y1 = 3503, x2 = 3068, y2 = 3513, h1 = 1705, h2 = 1017 },
       { type = "line", col = grey, x1 = 3068, y1 = 3513, x2 = 3068, y2 = 3515, h1 = 1017, h2 = 1049 },
-      { type = "model", anim = true, vertices = 306, x1 = -126, y1 = 388, z1 = -26, h = 1100 },
+      { type = "model", vertices = 306, x1 = -126, y1 = 388, z1 = -26, h = 1100, anim = true, speech = true },
     },
   },
   ["Aggie I see. Lonely and southern I feel. I am neither inside nor outside the house, yet no home would be complete without me. The treasure lies beneath me!"] = {},

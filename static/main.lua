@@ -88,6 +88,7 @@ return {
     local accel, accelwidth, accelheight = bolt.createsurfacefrompng("images.accel")
     local dig, digwidth, digheight = bolt.createsurfacefrompng("images.dig")
     local arrow, arrowwidth, arrowheight = bolt.createsurfacefrompng("images.arrow")
+    local speech, speechwidth, speechheight = bolt.createsurfacefrompng("images.speech")
 
     local lineprogram = bolt.createshaderprogram(bolt.createvertexshader(linevs), bolt.createfragmentshader(linefs))
     lineprogram:setattribute(0, 1, true, false, 2, 0, 2)
@@ -118,7 +119,7 @@ return {
       this.hasmatrices = true
     end
 
-    local drawiconxyz = function (this, event, x, y, z, wx, wy, surface, w, h, scale)
+    local drawiconwithpositions = function (this, event, x, y, z, wx, wy, surface, w, h, scale)
       local t = bolt.time() - this.t1
       local heightmod = 50 * math.sin(t / 500000.0)
       local dir = math.atan2(this.camz - wy, this.camx - wx) + (math.pi / 2)
@@ -131,7 +132,7 @@ return {
     end
 
     local drawicon = function (this, event, indicator, surface, w, h, scale)
-      drawiconxyz(this, event, indicator.x, indicator.h, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, surface, w, h, scale)
+      drawiconwithpositions(this, event, indicator.x, indicator.h, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, surface, w, h, scale)
     end
 
     -- onrendergameview calls the functions in this table for each indicator, according to
@@ -171,8 +172,12 @@ return {
       model = function (this, event, indicator)
         if indicator.point == nil then return end
         local x, y, z = indicator.point:get()
-        drawiconxyz(this, event, (x - tilehalfscale) / tilescale, y + indicator.h, (z - tilehalfscale) / tilescale, x, z, arrow, arrowwidth, arrowheight, 2.5)
         indicator.point = nil
+
+        drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h, (z - tilehalfscale) / tilescale, x, z, arrow, arrowwidth, arrowheight, 2.5)
+        if indicator.speech then
+          drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h + 300, (z - tilehalfscale) / tilescale, x, z, speech, speechwidth, speechheight, 5)
+        end
       end,
     }
 
