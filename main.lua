@@ -32,13 +32,26 @@ local function setobject (obj)
 end
 
 local function setobjectstatic (obj)
-  setobject(obj)
+  lastvalid = bolt.time()
+  currentobject = obj
+  local x = nil
+  local z = nil
+  local level = obj.level or 0
   if obj.mapx ~= nil then
-    m.points = { { x = obj.mapx, z = obj.mapy } }
+    x = obj.mapx
+    z = obj.mapy
   elseif obj.x ~= nil then
-    m.points = { { x = obj.x, z = obj.y } }
+    x = obj.x
+    z = obj.y
+  elseif obj.x1 ~= nil then
+    x = (obj.x1 + obj.x2) / 2
+    z = (obj.y1 + obj.y2) / 2
   else
     m.points = nil
+  end
+  if x ~= nil then
+    m.points = { { x = x, z = z } }
+    m:update(x, z, level)
   end
   m.lines = nil
   m:redraw()

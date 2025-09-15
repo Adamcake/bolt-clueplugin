@@ -16,6 +16,7 @@ local clues = {
       { type = "line", col = blue, x1 = 3303, y1 = 3534, x2 = 3311, y2 = 3526, h1 = 473, h2 = 705 },
       { type = "line", col = grey, x1 = 3311, y1 = 3526, x2 = 3311, y2 = 3527, h1 = 705, h2 = 649 },
       { type = "line", col = grey, x1 = 3311, y1 = 3527, x2 = 3312, y2 = 3527, h1 = 649, h2 = 665 },
+      { type = "arrow", x = 3312, y = 3528, h = 1445 },
     },
   },
   legendsguild = {
