@@ -165,10 +165,17 @@ return {get = function(bolt)
     end
   end
 
+  local update = function (map, x, y, level)
+    map.x = x
+    map.y = y
+    map.level = level or 0
+    map.pendingredraw = true
+  end
+
   return {
     create = function (x, y, level)
       local window = bolt.createwindow(10, 10, mapdefaultsize, mapdefaultsize + titleheight)
-      local map = { x = x, y = y, level = level, w = mapdefaultsize, h = mapdefaultsize, window = window, pendingredraw = false, redraw = redraw, onswapbuffers = onswapbuffers }
+      local map = { x = x, y = y, level = level, w = mapdefaultsize, h = mapdefaultsize, window = window, pendingredraw = false, update = update, redraw = redraw, onswapbuffers = onswapbuffers }
       local clickpixelx = 0
       local clickpixely = 0
       local clickmapx = 0

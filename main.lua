@@ -26,6 +26,22 @@ local m = map.create(mx / tilefactor, mz / tilefactor, 0)
 local function setobject (obj)
   lastvalid = bolt.time()
   currentobject = obj
+  if obj.x and obj.y then
+    m:update(obj.x, obj.y, obj.level)
+  end
+end
+
+local function setobjectstatic (obj)
+  setobject(obj)
+  if obj.mapx ~= nil then
+    m.points = { { x = obj.mapx, z = obj.mapy } }
+  elseif obj.x ~= nil then
+    m.points = { { x = obj.x, z = obj.y } }
+  else
+    m.points = nil
+  end
+  m.lines = nil
+  m:redraw()
 end
 
 bolt.onrendericon(function (event)
@@ -39,15 +55,16 @@ bolt.onrenderbigicon(function (event)
     if currentobject.onrenderbigicon then
       currentobject:onrenderbigicon(event)
     end
-    return
+    if not currentobject.static then
+      return
+    end
   end
 
   if nextbigiconismap then
     nextbigiconismap = false
     local object = static:trycreatefrombigicon(event)
-    if object then
-      print(string.format("map clue: %s", object.text))
-      -- todo
+    if object ~= nil and object ~= currentobject then
+      setobjectstatic(object)
     end
   end
 
@@ -85,7 +102,7 @@ bolt.onrender2d(function (event)
     return
   end
 
-  if currentobject then return end
+  if currentobject and not currentobject.static then return end
 
   local vertexcount = event:vertexcount()
   local verticesperimage = event:verticesperimage()
@@ -106,9 +123,8 @@ bolt.onrender2d(function (event)
     elseif aw == 496 and ah == 293 and event:texturecompare(ax, ay + 100, scrollbackgroundpixels) then
       -- standard clue scroll background
       local object = static:trycreatefromtext(event, i)
-      if object then
-        print(string.format("text clue: %s", object.text))
-        -- todo
+      if object ~= nil and object ~= currentobject then
+        setobjectstatic(object)
       else
         nextbigiconismap = true
        end
@@ -125,6 +141,12 @@ end)
 bolt.onminimapterrain(function (event)
   if currentobject and currentobject.onminimapterrain then
     currentobject:onminimapterrain(event)
+  end
+end)
+
+bolt.onrendergameview(function (event)
+  if currentobject and currentobject.onrendergameview then
+    currentobject:onrendergameview(event)
   end
 end)
 
