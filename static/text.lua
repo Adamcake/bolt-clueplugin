@@ -63,7 +63,16 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: ARR! SO I AM A CRUST, AND?"] = {},
-  ["This anagram reveals who to speak to next: BY LOOK"] = {},
+  ["This anagram reveals who to speak to next: BY LOOK"] = {
+    indicators = {
+      { type = "line", col = grey, x1 = 2542, y1 = 3169, x2 = 2538, y2 = 3168, h1 = 985, h2 = 985 },
+      { type = "line", col = yellow, x1 = 2538, y1 = 3168, x2 = 2530, y2 = 3160, h1 = 985, h2 = 985 },
+      { type = "line", col = grey, x1 = 2530, y1 = 3160, x2 = 2525, y2 = 3162, h1 = 985, h2 = 985 },
+      { type = "up", x = 2525.5, y = 3162, h = 1785 },
+      -- travel up ladder
+      { type = "model", vertices = 3798, x1 = 0, y1 = 543, z1 = 53, h = 1000, anim = true, speech = true },
+    },
+  },
   ["This anagram reveals who to speak to next: C ON GAME HOC"] = {},
   ["This anagram reveals who to speak to next: GULAG RUN"] = {},
   ["This anagram reveals who to speak to next: HE DO POSE. IT IS CULTRRL, MK?"] = {
@@ -376,7 +385,20 @@ local clues = {
       { type = "dig", x = 2838, y = 2914, h = 2085 },
     },
   },
-  ["08 degrees 03 minutes north 31 degrees 16 minutes east"] = {},
+  ["08 degrees 03 minutes north 31 degrees 16 minutes east"] = {
+    x = 3441,
+    y = 3419,
+    level = 0,
+    radius = 2,
+    indicators = {
+      { type = "line", col = grey, x1 = 3469, y1 = 3431, x2 = 3463, y2 = 3432, h1 = 153, h2 = 137 },
+      { type = "line", col = blue, x1 = 3463, y1 = 3432, x2 = 3453, y2 = 3432, h1 = 137, h2 = 281 },
+      { type = "line", col = grey, x1 = 3453, y1 = 3432, x2 = 3452, y2 = 3428, h1 = 281, h2 = 209 },
+      { type = "line", col = yellow, x1 = 3452, y1 = 3428, x2 = 3442, y2 = 3418, h1 = 209, h2 = 521 },
+      { type = "arrow", x = 3441, y = 3419, h = 1741 },
+      { type = "dig", x = 3441, y = 3419, h = 2141 },
+    },
+  },
   ["08 degrees 05 minutes south 15 degrees 56 minutes east"] = {
     x = 2950,
     y = 2902,
@@ -686,7 +708,16 @@ local clues = {
   ["Must be full of railings."] = {},
   ["My giant guardians below the market streets would be fans of rock and roll, if only they could grab hold of it. Dig near my purple smoke!"] = {},
   ["My home is grey, and made of stone; A castle with a search for a meal. Hidden in some drawers I am, across from a wooden wheel."] = {},
-  ["My name is like a tree, yet it is spelt with a 'g', come see the fur which is right near me."] = {},
+  ["My name is like a tree, yet it is spelt with a 'g', come see the fur which is right near me."] = {
+    x = 3221,
+    y = 3436,
+    level = 0,
+    radius = 4,
+    indicators = {
+      { type = "line", col = yellow, x1 = 3212, y1 = 3434, x2 = 3220, y2 = 3435, h1 = 985, h2 = 985 },
+      { type = "model", vertices = 3090, x1 = -156, y1 = 380, z1 = 20, h = 1000, anim = true, speech = true },
+    },
+  },
   ["Navigating to this crate will be a trial."] = {},
   ["Often sought out by scholars of histories past, find me where words of wisdom speak volumes."] = {
     x1 = 3351,
@@ -714,7 +745,18 @@ local clues = {
   ["Snah? I feel all confused, like one of those cakes."] = {},
   ["Surprising? I bet he is..."] = {},
   ["The beasts to my east snap claws and tails, The rest to my west can slide and eat fish. The force to my north will jump and they'll wail, Come dig by my fire and make a wish."] = {},
-  ["The cheapest water for miles around, but they react badly to religious icons."] = {},
+  ["The cheapest water for miles around, but they react badly to religious icons."] = {
+    x = 3178,
+    y = 2987,
+    level = 0,
+    radius = 1,
+    indicators = {
+      { type = "line", col = yellow, x1 = 3170, y1 = 2982, x2 = 3177, y2 = 2984, h1 = 1057, h2 = 825 },
+      { type = "line", col = grey, x1 = 3177, y1 = 2984, x2 = 3177, y2 = 2986, h1 = 825, h2 = 825 },
+      { type = "line", col = grey, x1 = 3177, y1 = 2986, x2 = 3178, y2 = 2986, h1 = 825, h2 = 825 },
+      { type = "arrow", x = 3178, y = 2987, h = 1705 },
+    },
+  },
   ["There is no 'worthier' lord."] = {
     x = 2186,
     y = 3284,
