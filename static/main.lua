@@ -108,7 +108,15 @@ return {
           if indicator.vertices ~= event:vertexcount() then goto c1 end
           local x, y, z = event:vertexpoint(1):get()
           if x ~= indicator.x1 or y ~= indicator.y1 or z ~= indicator.z1 then goto c1 end
-          indicator.point = zeropoint:transform(event:modelmatrix())
+          local point = zeropoint:transform(event:modelmatrix())
+          if indicator.points == nil then
+            indicator.pointcount = 1
+            indicator.points = { point }
+          else
+            indicator.pointcount = indicator.pointcount + 1
+            indicator.points[indicator.pointcount] = point
+          end
+          --indicator.point = zeropoint:transform(event:modelmatrix())
           ::c1::
         end
       end
@@ -179,14 +187,16 @@ return {
       end,
 
       model = function (this, event, indicator)
-        if indicator.point == nil then return end
-        local x, y, z = indicator.point:get()
-        indicator.point = nil
-
-        drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h, (z - tilehalfscale) / tilescale, x, z, arrow, arrowwidth, arrowheight, 2.5)
-        if indicator.speech then
-          drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h + 300, (z - tilehalfscale) / tilescale, x, z, speech, speechwidth, speechheight, 5)
+        if indicator.points == nil then return end
+        for _, point in ipairs(indicator.points) do
+          local x, y, z = point:get()
+          drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h, (z - tilehalfscale) / tilescale, x, z, arrow, arrowwidth, arrowheight, 2.5)
+          if indicator.speech then
+            drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h + 300, (z - tilehalfscale) / tilescale, x, z, speech, speechwidth, speechheight, 5)
+          end
         end
+        indicator.points = nil
+        indicator.pointcount = 0
       end,
     }
 
