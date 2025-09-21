@@ -204,7 +204,14 @@ local clues = {
       { type = "model", vertices = 3795, x1 = -2, y1 = 872, z1 = 11, h = 1200, anim = true, speech = true },
     },
   },
-  ["This anagram reveals who to speak to next: PROFS LOSE WRONG PIE"] = {},
+  ["This anagram reveals who to speak to next: PROFS LOSE WRONG PIE"] = {
+    x = 3103,
+    y = 3155,
+    level = 0,
+    indicators = {
+      { type = "model", vertices = 6117, x1 = -84, y1 = 208, z1 = 316, h = 1100, anim = true, speech = true },
+    },
+  },
   ["This anagram reveals who to speak to next: RED ART TANS"] = {
     x = 3033,
     y = 3190,
@@ -974,7 +981,6 @@ local clues = {
       { type = "model", vertices = 2811, x1 = 24, y1 = 53, z1 = -84, h = 1200, anim = true, speech = true },
     },
   },
-  ["If a man carried my burden, he would break his back. I am not rich, but leave silver in my track. Speak to the keeper of my trail."] = {},
   ["If you didn't want to be here and in danger, you should lever things well enough alone."] = {
     x = 3154,
     y = 3924,
@@ -990,8 +996,8 @@ local clues = {
   ["If you look closely enough, it seems that the archers have lost more than their needles."] = {
     x = 2672,
     y = 3415,
-    radius = 1,
     level = 0,
+    radius = 1,
     indicators = {
       { type = "line", col = grey, x1 = 2655, y1 = 3441, x2 = 2660, y2 = 3436, h1 = 833, h2 = 985 },
       { type = "line", col = blue, x1 = 2660, y1 = 3436, x2 = 2670, y2 = 3426, h1 = 985, h2 = 985 },
@@ -1000,7 +1006,22 @@ local clues = {
     },
   },
   ["I lie lonely and forgotten in mid wilderness, where the dead rise from their beds. Feel free to quarrel and wind me up, and dig while you shoot their heads."] = {},
-  ["It seems to have reached the end of the line, and it's still empty."] = {},
+  ["It seems to have reached the end of the line, and it's still empty."] = {
+    x = 3041,
+    y = 9820,
+    level = 0,
+    indicators = {
+      { type = "line", col = yellow, x1 = 3037, y1 = 9775, x2 = 3042, y2 = 9785, h1 = 985, h2 = 985 },
+      { type = "line", col = grey, x1 = 3042, y1 = 9785, x2 = 3042, y2 = 9789, h1 = 985, h2 = 985 },
+      { type = "line", col = blue, x1 = 3042, y1 = 9789, x2 = 3042, y2 = 9799, h1 = 985, h2 = 985 },
+      { type = "line", col = grey, x1 = 3042, y1 = 9799, x2 = 3042, y2 = 9806, h1 = 985, h2 = 985 },
+      { type = "line", col = grey, x1 = 3042, y1 = 9806, x2 = 3043, y2 = 9807, h1 = 985, h2 = 985 },
+      { type = "line", col = grey, x1 = 3043, y1 = 9807, x2 = 3043, y2 = 9808, h1 = 985, h2 = 993 },
+      { type = "line", col = blue, x1 = 3043, y1 = 9808, x2 = 3043, y2 = 9818, h1 = 993, h2 = 985 },
+      { type = "line", col = grey, x1 = 3043, y1 = 9818, x2 = 3042, y2 = 9820, h1 = 985, h2 = 921 },
+      { type = "arrow", x = 3041, y = 9820, h = 1821 },
+    },
+  },
   ["Mine was the strangest birth under the sun. I left the crimson sack, yet life had not begun. Entered the world, and yet was seen by none."] = {
     x = 2832,
     y = 9586,
@@ -1308,6 +1329,10 @@ local clues = {
     },
   },
   ["You don't need to go hopping mad - or take steps - to get to this treasure: just be totally shellfish."] = {
+    x = 2519,
+    y = 3594,
+    level = 0,
+    radius = 2,
     indicators = {
       { type = "line", col = grey, x1 = 2520, y1 = 3571, x2 = 2519, y2 = 3573, h1 = 849, h2 = 601 },
       { type = "line", col = yellow, x1 = 2519, y1 = 3573, x2 = 2519, y2 = 3583, h1 = 601, h2 = 737 },
@@ -1360,9 +1385,9 @@ local clues = {
   },
   ["You will need to wash the old ash off your spade when you dig here, but the only water nearby is stagnant."] = {
     x = 2134,
-    y = 5162,
+    y = 5163,
     level = 0,
-    radius = 1,
+    radius = 2,
     indicators = {
       { type = "line", col = yellow, x1 = 2126, y1 = 5144, x2 = 2117, y2 = 5135, h1 = 1289, h2 = 281 },
       { type = "line", col = grey, x1 = 2117, y1 = 5135, x2 = 2119, y2 = 5135, h1 = 281, h2 = 761 },
@@ -1372,8 +1397,8 @@ local clues = {
       { type = "line", col = grey, x1 = 2147, y1 = 5148, x2 = 2140, y2 = 5170, h1 = 937, h2 = 2537 },
       { type = "line", col = yellow, x1 = 2140, y1 = 5170, x2 = 2131, y2 = 5161, h1 = 2537, h2 = 5401 },
       { type = "line", col = grey, x1 = 2131, y1 = 5161, x2 = 2133, y2 = 5162, h1 = 5401, h2 = 5401 },
-      { type = "arrow", x = 2134, y = 5162, h = 6601 },
-      { type = "dig", x = 2134, y = 5162, h = 7001 },
+      { type = "arrow", x = 2134, y = 5163, h = 6601 },
+      { type = "dig", x = 2134, y = 5163, h = 7001 },
     },
   },
   ["Blow a raspberry at the monkey cage in Ardougne Zoo"] = {},

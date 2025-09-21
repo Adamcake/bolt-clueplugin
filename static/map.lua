@@ -4,7 +4,37 @@ local grey = { r = 150, g = 150, b = 150 }
 
 local clues = {
   -- hard
-  dwf = { text = "[map: search a crate in the centre of the dark warriors' fortress]" },
+  dwf = {
+    text = "[map: search a crate in the centre of the dark warriors' fortress]",
+    level = 0,
+    indicators = {
+      { type = "line", col = grey, x1 = 2968, y1 = 3696, x2 = 2958, y2 = 3693, h1 = 865, h2 = 1137 },
+      { type = "line", col = grey, x1 = 2958, y1 = 3693, x2 = 2958, y2 = 3691, h1 = 1137, h2 = 1289 },
+      { type = "line", col = blue, x1 = 2958, y1 = 3691, x2 = 2958, y2 = 3681, h1 = 1289, h2 = 1361 },
+      { type = "line", col = yellow, x1 = 2958, y1 = 3681, x2 = 2968, y2 = 3671, h1 = 1361, h2 = 1097 },
+      { type = "line", col = grey, x1 = 2968, y1 = 3671, x2 = 2969, y2 = 3671, h1 = 1097, h2 = 993 },
+      { type = "line", col = grey, x1 = 2969, y1 = 3671, x2 = 2974, y2 = 3666, h1 = 993, h2 = 1353 },
+      { type = "line", col = blue, x1 = 2974, y1 = 3666, x2 = 2984, y2 = 3656, h1 = 1353, h2 = 1217 },
+      { type = "line", col = grey, x1 = 2984, y1 = 3656, x2 = 2985, y2 = 3655, h1 = 1217, h2 = 1073 },
+      { type = "line", col = grey, x1 = 2985, y1 = 3655, x2 = 2985, y2 = 3652, h1 = 1073, h2 = 865 },
+      { type = "line", col = grey, x1 = 2985, y1 = 3652, x2 = 2987, y2 = 3652, h1 = 865, h2 = 793 },
+      { type = "line", col = grey, x1 = 2987, y1 = 3652, x2 = 3005, y2 = 3634, h1 = 793, h2 = 1033 },
+      { type = "line", col = yellow, x1 = 3005, y1 = 3634, x2 = 3013, y2 = 3632, h1 = 1033, h2 = 697 },
+      { type = "line", col = blue, x1 = 3013, y1 = 3632, x2 = 3015, y2 = 3632, h1 = 697, h2 = 1433 },
+      { type = "line", col = blue, x1 = 3015, y1 = 3632, x2 = 3017, y2 = 3632, h1 = 1433, h2 = 1929 },
+      { type = "line", col = blue, x1 = 3017, y1 = 3632, x2 = 3019.5, y2 = 3632, h1 = 1929, h2 = 2041 },
+      { type = "line", col = blue, x1 = 3019.5, y1 = 3632, x2 = 3020, y2 = 3632, h1 = 2041, h2 = 1945 },
+      { type = "line", col = grey, x1 = 3020, y1 = 3632, x2 = 3023, y2 = 3632, h1 = 1945, h2 = 1967 },
+      { type = "line", col = grey, x1 = 3023, y1 = 3632, x2 = 3023, y2 = 3626, h1 = 1967, h2 = 1951 },
+      { type = "line", col = grey, x1 = 3023, y1 = 3626, x2 = 3025, y2 = 3626, h1 = 1951, h2 = 1967 },
+      { type = "line", col = blue, x1 = 3025, y1 = 3626, x2 = 3032, y2 = 3626, h1 = 1967, h2 = 1967 },
+      { type = "line", col = grey, x1 = 3032, y1 = 3626, x2 = 3035, y2 = 3626, h1 = 1967, h2 = 1951 },
+      { type = "line", col = grey, x1 = 3035, y1 = 3626, x2 = 3035, y2 = 3631, h1 = 1951, h2 = 1967 },
+      { type = "line", col = grey, x1 = 3035, y1 = 3631, x2 = 3034, y2 = 3631, h1 = 1967, h2 = 1967 },
+      { type = "line", col = blue, x1 = 3034, y1 = 3631, x2 = 3022, y2 = 3631, h1 = 1967, h2 = 1945 },
+      { type = "arrow", x = 3026, y = 3629, h = 2945 },
+    },
+  },
   fortforinthry = {
     text = "[map: search a crate outside the gate of fort forinthry]",
     x = 3312,
