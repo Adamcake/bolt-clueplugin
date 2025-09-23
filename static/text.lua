@@ -724,7 +724,16 @@ local clues = {
   ["20 degrees 33 minutes north 15 degrees 48 minutes east"] = {},
   ["21 degrees 24 minutes north 17 degrees 54 minutes east"] = {},
   ["22 degrees 35 minutes north 19 degrees 18 minutes east"] = {},
-  ["22 degrees 45 minutes north 26 degrees 33 minutes east"] = {},
+  ["22 degrees 45 minutes north 26 degrees 33 minutes east"] = {
+    x = 3290,
+    y = 3889,
+    level = 0,
+    radius = 2,
+    indicators = {
+      { type = "arrow", x = 3290, y = 3889, h = 3413 },
+      { type = "dig", x = 3290, y = 3889, h = 3813 },
+    },
+  },
   ["24 degrees 26 minutes north 26 degrees 24 minutes east"] = {},
   ["24 degrees 56 minutes north 22 degrees 28 minutes east"] = {},
   ["24 degrees 58 minutes north 18 degrees 43 minutes east"] = {},
