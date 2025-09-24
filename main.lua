@@ -1,5 +1,21 @@
 local bolt = require("bolt")
 bolt.checkversion(1, 0)
+
+-- load all images and store them in the "bolt" table, specifically bolt.images.
+-- this is for convenience as the bolt table is passed around pretty much everywhere,
+-- so we still only have to pass around 1 table instead of 2.
+-- making this an inline function and calling it means the locals don't stay in memory
+-- longer than we need them to.
+_ = (function (bolt)
+  local imagenames = { "accel", "arrow", "dig", "digits", "letters", "marker", "markeractive", "markerinactive", "speech" }
+  local images = { tp = {} }
+  bolt.images = images
+  for _, name in ipairs(imagenames) do
+    local s, w, h = bolt.createsurfacefrompng(string.format("images.%s", name))
+    images[name] = { surface = s, w = w, h = h }
+  end
+end)(bolt)
+
 local scans = require("scan.main").get(bolt)
 local compasses = require("compass.main").get(bolt)
 local knots = require("knot.main").get(bolt)
@@ -54,6 +70,8 @@ local function setobjectstatic (obj)
     m:update(x, z, level)
   end
   m.lines = nil
+  m.tp = obj.tp
+  m.tpinfo = obj.tpinfo
   m:redraw()
 end
 

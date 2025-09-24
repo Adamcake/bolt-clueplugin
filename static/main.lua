@@ -85,11 +85,6 @@ return {
     local m = map.get(bolt)
     local zeropoint = bolt.point(0, 0, 0)
 
-    local accel, accelwidth, accelheight = bolt.createsurfacefrompng("images.accel")
-    local dig, digwidth, digheight = bolt.createsurfacefrompng("images.dig")
-    local arrow, arrowwidth, arrowheight = bolt.createsurfacefrompng("images.arrow")
-    local speech, speechwidth, speechheight = bolt.createsurfacefrompng("images.speech")
-
     local lineprogram = bolt.createshaderprogram(bolt.createvertexshader(linevs), bolt.createfragmentshader(linefs))
     lineprogram:setattribute(0, 1, true, false, 2, 0, 2)
     lineprogram:setuniform2f(2, tilescale, tilehalfscale)
@@ -127,20 +122,20 @@ return {
       this.hasmatrices = true
     end
 
-    local drawiconwithpositions = function (this, event, x, y, z, wx, wy, surface, w, h, scale)
+    local drawiconwithpositions = function (this, event, x, y, z, wx, wy, image, scale)
       local t = bolt.time() - this.t1
       local heightmod = 50 * math.sin(t / 500000.0)
       local dir = math.atan2(this.camz - wy, this.camx - wx) + (math.pi / 2)
-      iconprogram:setuniform3f(1, dir, w * scale, h * -scale)
-      iconprogram:setuniformsurface(2, surface)
+      iconprogram:setuniform3f(1, dir, image.w * scale, image.h * -scale)
+      iconprogram:setuniformsurface(2, image.surface)
       iconprogram:setuniformdepthbuffer(3, event)
       iconprogram:setuniform3f(4, x, y + heightmod, z)
       iconprogram:setuniformmatrix4f(5, false, this.viewprojmatrix:get())
       iconprogram:drawtogameview(event, iconbuffer, 6)
     end
 
-    local drawicon = function (this, event, indicator, surface, w, h, scale)
-      drawiconwithpositions(this, event, indicator.x, indicator.h, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, surface, w, h, scale)
+    local drawicon = function (this, event, indicator, image, scale)
+      drawiconwithpositions(this, event, indicator.x, indicator.h, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, image, scale)
     end
 
     -- onrendergameview calls the functions in this table for each indicator, according to
@@ -166,33 +161,33 @@ return {
       end,
 
       accel = function (this, event, indicator)
-        drawicon(this, event, indicator, accel, accelwidth, accelheight, 2)
+        drawicon(this, event, indicator, bolt.images.accel, 2)
       end,
 
       dig = function (this, event, indicator)
-        drawicon(this, event, indicator, dig, digwidth, digheight, 2)
+        drawicon(this, event, indicator, bolt.images.dig, 2)
       end,
 
       arrow = function (this, event, indicator)
-        drawicon(this, event, indicator, arrow, arrowwidth, arrowheight, 2.5)
+        drawicon(this, event, indicator, bolt.images.arrow, 2.5)
       end,
 
       up = function (this, event, indicator)
-        drawicon(this, event, indicator, arrow, arrowwidth, arrowheight, -1.5)
+        drawicon(this, event, indicator, bolt.images.arrow, -1.5)
       end,
 
       topfloor = function (this, event, indicator)
-        drawiconwithpositions(this, event, indicator.x, indicator.h, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, arrow, arrowwidth, arrowheight, -1.5)
-        drawiconwithpositions(this, event, indicator.x, indicator.h + 200, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, arrow, arrowwidth, arrowheight, -1.5)
+        drawiconwithpositions(this, event, indicator.x, indicator.h, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, bolt.images.arrow, -1.5)
+        drawiconwithpositions(this, event, indicator.x, indicator.h + 200, indicator.y, indicator.x * tilescale + tilehalfscale, indicator.y * tilescale + tilehalfscale, bolt.images.arrow, -1.5)
       end,
 
       model = function (this, event, indicator)
         if indicator.points == nil then return end
         for _, point in ipairs(indicator.points) do
           local x, y, z = point:get()
-          drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h, (z - tilehalfscale) / tilescale, x, z, arrow, arrowwidth, arrowheight, 2.5)
+          drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h, (z - tilehalfscale) / tilescale, x, z, bolt.images.arrow, 2.5)
           if indicator.speech then
-            drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h + 300, (z - tilehalfscale) / tilescale, x, z, speech, speechwidth, speechheight, 5)
+            drawiconwithpositions(this, event, (x - tilehalfscale) / tilescale, y + indicator.h + 300, (z - tilehalfscale) / tilescale, x, z, bolt.images.speech, 5)
           end
         end
         indicator.points = nil

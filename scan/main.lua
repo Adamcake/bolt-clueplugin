@@ -33,8 +33,8 @@ return {get = function(bolt)
   local checkinvertalmicros = 100000 -- a tenth of a second
   local statechangegraceperiod = 1200000 -- two game ticks
   local zeropoint = bolt.point(0, 0, 0)
-  local surfacemaybe, maybewidth, maybeheight = bolt.createsurfacefrompng("images.maybe")
-  local surfacenope, nopewidth, nopeheight = bolt.createsurfacefrompng("images.nope")
+  local markeractive = bolt.images.markeractive
+  local markerinactive = bolt.images.markerinactive
 
   -- checks if the first vertex's model position matches the one shared by all 3 ring models.
   -- assumes there is at least one vertex
@@ -55,7 +55,7 @@ return {get = function(bolt)
     if meerkats then
       scanrange = scanrange + 5
     end
-    surfacenope:setalpha(0.75)
+    markerinactive.surface:setalpha(0.75)
     return {
       modelfound = false,
       renderviewproj = nil,
@@ -65,7 +65,7 @@ return {get = function(bolt)
       nextchecktime = bolt.time(),
       pointlist = pointlist,
       scanrange = scanrange,
-      surfacemaybeloading = bolt.createsurface(maybewidth, maybeheight),
+      surfacemaybeloading = bolt.createsurface(markeractive.w, markeractive.h),
 
       onrender3d = function (this, event)
         local vertexcount = event:vertexcount()
@@ -76,7 +76,7 @@ return {get = function(bolt)
           this.modelfound = true
           if not this.checkframe then return end
     
-          surfacemaybe:setalpha((modeltype == 3) and 0.8 or 1)
+          markeractive.surface:setalpha((modeltype == 3) and 0.8 or 1)
           local ringworldpoint = zeropoint:transform(event:modelmatrix())
           local x, y, z = ringworldpoint:get()
           this.lastringx = x / 512.0
@@ -159,23 +159,23 @@ return {get = function(bolt)
               local scale = 0.6
               local imgradius = 16 * scale
               local imgsize = 32 * scale
-              surfacenope:drawtoscreen(0, 0, nopewidth, nopeheight, px - imgradius, py - imgradius, imgsize, imgsize)
+              markerinactive.surface:drawtoscreen(0, 0, markerinactive.w, markerinactive.h, px - imgradius, py - imgradius, imgsize, imgsize)
             elseif (point.state == 1 or point.state == 2 or point.state == 3) and (t - point.laststatechange) <= (statechangegraceperiod * 1.5) then
               -- "loading" point
               local scale = 1
               local imgradius = 16 * scale
               local imgsize = 32 * scale
               this.surfacemaybeloading:clear()
-              surfacemaybe:drawtosurface(this.surfacemaybeloading, 0, 0, maybewidth, maybeheight, 0, 0, maybewidth, maybeheight)
+              markeractive.surface:drawtosurface(this.surfacemaybeloading, 0, 0, markeractive.w, markeractive.h, 0, 0, markeractive.w, markeractive.h)
               program:setuniform1f(0, (t - point.laststatechange) / statechangegraceperiod)
               program:drawtosurface(this.surfacemaybeloading, shaderbuffer, 6)
-              this.surfacemaybeloading:drawtoscreen(0, 0, maybewidth, maybeheight, px - imgradius, py - imgradius, imgsize, imgsize)
+              this.surfacemaybeloading:drawtoscreen(0, 0, markeractive.w, markeractive.h, px - imgradius, py - imgradius, imgsize, imgsize)
             else
               -- normal non-eliminated point
               local scale = 0.75
               local imgradius = 16 * scale
               local imgsize = 32 * scale
-              surfacemaybe:drawtoscreen(0, 0, maybewidth, maybeheight, px - imgradius, py - imgradius, imgsize, imgsize)
+              markeractive.surface:drawtoscreen(0, 0, markeractive.w, markeractive.h, px - imgradius, py - imgradius, imgsize, imgsize)
             end
           end
         end

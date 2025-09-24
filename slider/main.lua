@@ -258,25 +258,21 @@ return {get = function(bolt)
 
   local goal_positions = build_goal_positions(goal)
 
-  local digits, _, digitheight = bolt.createsurfacefrompng("images.digits")
-  local digithalfwidth = 8
-  local digitwidth = digithalfwidth * 2
+  local digits = bolt.images.digits
+  local digithalfwidth = 19.5
+  local digithalfheight = digits.h / 2
+  local digitwidth = 39
   local objecthalfsize = 24
   local objectsize = 49
   local resolveinterval = 200000 -- 0.2 seconds
   local clickresolvedelay = 1000000 -- 1 second
 
-    -- draws an integer on the screen centered on (x,y), assuming it will be 1 or 2 digits
+    -- draws an integer on the screen centered on (x,y), assuming it will be a digit 1-9
   local function drawnumber (n, x, y)
-    local doubledigit = n > 9
-    local startx = x - (doubledigit and digitwidth or digithalfwidth)
-    local starty = y - (digitheight / 2)
-    if doubledigit then
-      digits:drawtoscreen(digitwidth * math.floor(n / 10), 0, digitwidth, digitheight, startx, starty, digitwidth, digitheight)
-      digits:drawtoscreen(digitwidth * (n % 10), 0, digitwidth, digitheight, startx + digitwidth, starty, digitwidth, digitheight)
-    else
-      digits:drawtoscreen(digitwidth * n, 0, digitwidth, digitheight, startx, starty, digitwidth, digitheight)
-    end
+    local scale = 0.75
+    local startx = x - (digithalfwidth * scale)
+    local starty = y - (digithalfheight * scale)
+    digits.surface:drawtoscreen(digitwidth * n, 0, digitwidth, digits.h, startx, starty, digitwidth * scale, digits.h * scale)
   end
 
   return {

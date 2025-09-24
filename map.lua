@@ -1,4 +1,10 @@
 return {get = function(bolt)
+  -- byte values of these chars, hard-coded for now
+  local charA = 65
+  local charZ = 90
+  local char0 = 48
+  local char9 = 57
+
   local titleheight = 18
   local borderwidth = 5
   local linewidth = 10
@@ -6,8 +12,13 @@ return {get = function(bolt)
   local chunksize = 64 --in tiles
   local chunks = {}
   local whitepixel = bolt.createsurfacefromrgba(1, 1, "\xFF\xFF\xFF\xFF")
-  local marker, markerw, markerh = bolt.createsurfacefrompng("images.marker")
-  marker:setalpha(0.9)
+  local marker = bolt.images.marker
+  local digits = bolt.images.digits
+  local letters = bolt.images.letters
+  local teleports = bolt.images.tp
+  local charwidth = 39
+  local charbaseline = 4 -- height of the baseline from the bottom of the image, in pixels
+  marker.surface:setalpha(0.9)
 
   -- custom shader for drawing lines
   local lineprogram = (function (bolt)
@@ -71,13 +82,56 @@ return {get = function(bolt)
 
     if map.points then
       for _, point in pairs(map.points) do
-        if point.x >= (gx1 - markerw) and point.x <= (gx2 + markerw) and point.z >= (gy1 - markerh) and point.z <= (gy2 + markerh) then
+        if point.x >= (gx1 - marker.w) and point.x <= (gx2 + marker.w) and point.z >= (gy1 - marker.h) and point.z <= (gy2 + marker.h) then
           local tilediffx = point.x + 0.5 - map.x
           local tilediffy = map.y - (point.z + 0.5)
-          local drawx = (map.w / 2) + (tilediffx * viewscale) - (markerw / 2)
-          local drawy = (map.h / 2) + (tilediffy * viewscale) + titleheight - (markerh - 4)
-          marker:drawtowindow(window, 0, 0, markerw, markerh, drawx, drawy, markerw, markerh)
+          local drawx = (map.w / 2) + (tilediffx * viewscale) - (marker.w / 2)
+          local drawy = (map.h / 2) + (tilediffy * viewscale) + titleheight - (marker.h - 4)
+          marker.surface:drawtowindow(window, 0, 0, marker.w, marker.h, drawx, drawy, marker.w, marker.h)
         end
+      end
+    end
+
+    local fullheight = map.h + titleheight
+    local padding = 2
+    local margin = 4
+    local chardrawnheight = 48
+    local chardrawnwidth = charwidth * chardrawnheight / letters.h -- assumes digits.h and letters.h are the same
+    local infoiconsize = 64
+    local writex = borderwidth + padding + margin
+
+    local infoboxinnerwidth = 0
+    local infoboxinnerheight = chardrawnheight
+    if map.tp then infoboxinnerwidth = infoiconsize + 1 end
+    if map.tpinfo then infoboxinnerwidth = infoboxinnerwidth + ((chardrawnwidth + 1) * #map.tpinfo) - 1 end
+    if infoboxinnerwidth > 0 then
+      local doublepadding = padding * 2
+      whitepixel:settint(0.25, 0.25, 0.25, 0.25)
+      whitepixel:setalpha(0.75)
+      whitepixel:drawtowindow(window, 0, 0, 1, 1, borderwidth + margin, fullheight - (chardrawnheight + borderwidth + doublepadding + margin), infoboxinnerwidth + doublepadding, infoboxinnerheight + doublepadding)
+    end
+
+    if map.tp then
+      local tp = teleports[map.tp]
+      if tp == nil then
+        local s, w, h = bolt.createsurfacefrompng(string.format("images.tp.%s", map.tp))
+        tp = { surface = s, w = w, h = h }
+        teleports[map.tp] = tp
+      end
+      tp.surface:drawtowindow(window, 0, 0, tp.w, tp.h, writex, fullheight - borderwidth - margin - ((infoboxinnerheight + (padding * 2)) / 2) - (infoiconsize / 2), infoiconsize, infoiconsize)
+      writex = writex + infoiconsize + 1
+    end
+
+    if map.tpinfo then
+      local writeheight = fullheight + charbaseline - (chardrawnheight + borderwidth + padding + margin)
+      for i = 1, #map.tpinfo do
+        local byte = string.byte(map.tpinfo, i)
+        if byte >= charA and byte <= charZ then
+          letters.surface:drawtowindow(window, charwidth * (byte - charA), 0, charwidth, letters.h, writex, writeheight, chardrawnwidth, chardrawnheight)
+        elseif byte >= char0 and byte <= char9 then
+          digits.surface:drawtowindow(window, charwidth * (byte - char0), 0, charwidth, digits.h, writex, writeheight, chardrawnwidth, chardrawnheight)
+        end
+        writex = writex + chardrawnwidth + 1
       end
     end
 
@@ -132,7 +186,7 @@ return {get = function(bolt)
       surface:drawtowindow(window, 0, 0, map.w, map.h, 0, titleheight, map.w, map.h)
     end
 
-    local fullheight = map.h + titleheight
+    whitepixel:setalpha(1)
     whitepixel:settint(0.025, 0.025, 0.025)
     whitepixel:drawtowindow(window, 0, 0, 1, 1, 0, 0, borderwidth, fullheight)
     whitepixel:drawtowindow(window, 0, 0, 1, 1, map.w - borderwidth, 0, borderwidth, fullheight)
@@ -156,6 +210,8 @@ return {get = function(bolt)
         chunks[name] = nil
       end
     end
+
+    map.pendingredraw = false
   end
 
   local onswapbuffers = function (map)

@@ -90,9 +90,10 @@ return {get = function(bolt)
   local targetcirclered = "\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x21\x12\x12\x12\xe9\x4b\x4b\x4b\xff\x5b\x5b\x5b\xff\x5b\x5b\x5b\xff\x3b\x3b\x3b\xff\x00\x00\x01\xe3\x00\x00\x01\x0e\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x22\x22\x22\x3e\x5b\x5b\x5b\xf5\x73\x73\x73\xff\x7a\x7a\x7a\xff\x84\x84\x84\xff\x33\x33\x33\xff\x22\x22\x22\xff\x00\x00\x01\xbc\x33\x33\x33\x00\xb3\xb3\xb3\x00"
   local targetcirclegreen = "\x9b\x9b\x9b\x00\x4b\x4b\x4b\x00\x00\x00\x01\xbc\x33\x33\x33\xe3\xb3\xb3\xb3\xff\x9b\x9b\x9b\xff\x4b\x4b\x4b\xff\x0c\x0c\x0c\xe1\x0c\x0c\x0c\x38\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x0c\x0c\x0c\x00\x12\x12\x12\x00\x00\x00\x01\x00\xd2\xd2\xd2\x00\xeb\xeb\xeb\x00\x73\x73\x73\x00\x12\x12\x12\x0a\x00\x00\x01\x8f\xd2\xd2\xd2\xfb\xeb\xeb\xeb\xff\x73\x73\x73\xff\x53\x53\x53\xff\x00\x00\x01\xa9\x00\x00\x01\x00\x00\x00\x01\x00"
 
-  local digits, _, digitheight = bolt.createsurfacefrompng("images.digits")
-  local digithalfwidth = 8
-  local digitwidth = digithalfwidth * 2
+  local digits = bolt.images.digits
+  local digithalfwidth = 19.5
+  local digithalfheight = digits.h / 2
+  local digitwidth = 39
   local runedecorvertexid = 175
   local objecthalfsize = 24
   local objectsize = objecthalfsize * 2
@@ -113,14 +114,16 @@ return {get = function(bolt)
 
   -- draws an integer on the screen centered on (x,y), assuming it will be 1 or 2 digits
   local function drawnumber (n, x, y)
+    local scale = 0.6
     local doubledigit = n > 9
-    local startx = x - (doubledigit and digitwidth or digithalfwidth)
-    local starty = y - (digitheight / 2)
+    local startx = x - ((doubledigit and digitwidth or digithalfwidth) * scale)
+    local starty = y - (digithalfheight * scale)
+    local scaledwidth = digitwidth * scale
     if doubledigit then
-      digits:drawtoscreen(digitwidth * math.floor(n / 10), 0, digitwidth, digitheight, startx, starty, digitwidth, digitheight)
-      digits:drawtoscreen(digitwidth * (n % 10), 0, digitwidth, digitheight, startx + digitwidth, starty, digitwidth, digitheight)
+      digits.surface:drawtoscreen(digitwidth * math.floor(n / 10), 0, digitwidth, digits.h, startx, starty, scaledwidth, digits.h * scale)
+      digits.surface:drawtoscreen(digitwidth * (n % 10), 0, digitwidth, digits.h, startx + scaledwidth, starty, scaledwidth, digits.h * scale)
     else
-      digits:drawtoscreen(digitwidth * n, 0, digitwidth, digitheight, startx, starty, digitwidth, digitheight)
+      digits.surface:drawtoscreen(digitwidth * n, 0, digitwidth, digits.h, startx, starty, scaledwidth, digits.h * scale)
     end
   end
 

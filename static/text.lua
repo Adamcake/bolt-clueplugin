@@ -33,6 +33,7 @@ local clues = {
   ["This anagram reveals who to speak to next: STAB OB"] = {},
   ["This anagram reveals who to speak to next: WINSTON LANE"] = {},
   ["This anagram reveals who to speak to next: A ZEN SHE"] = {
+    tp = "ardougne",
     x1 = 2654,
     y1 = 3291,
     x2 = 2661,
@@ -43,6 +44,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: ACE MATCH ELM"] = {
+    tp = "ringofduelling",
+    tpinfo = "1",
     x1 = 3284,
     y1 = 3234,
     x2 = 3294,
@@ -58,6 +61,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: AN PAINT TONIC"] = {
+    tp = "house",
+    tpinfo = "2",
     x = 2869,
     y = 9877,
     level = 0,
@@ -72,6 +77,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: ARR! SO I AM A CRUST, AND?"] = {
+    tp = "fairyring",
+    tpinfo = "AKQ",
     x = 2339,
     y = 3675,
     level = 0,
@@ -91,6 +98,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: BY LOOK"] = {
+    tp = "spirittree",
+    tpinfo = "1",
     x = 2528,
     y = 3161,
     level = 1,
@@ -104,6 +113,7 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: C ON GAME HOC"] = {
+    tp = "eaglespeaklode",
     x = 2406,
     y = 3497,
     level = 0,
@@ -121,6 +131,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: GULAG RUN"] = {
+    tp = "ringofduelling",
+    tpinfo = "2",
     x = 2444,
     y = 3052,
     level = 0,
@@ -136,6 +148,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: HE DO POSE. IT IS CULTRRL, MK?"] = {
+    tp = "lotd",
+    tpinfo = "3",
     x = 2904,
     y = 10207,
     level = 0,
@@ -145,6 +159,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: I EAT ITS CHART HINTS DO U"] = {
+    tp = "desertamulet",
+    tpinfo = "1",
     x = 3425,
     y = 2928,
     level = 0,
@@ -153,6 +169,7 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: I FAFFY RUN"] = {
+    tp = "fairyring",
     x = 2387,
     y = 4467,
     level = 0,
@@ -168,6 +185,7 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: LAND DOOMD"] = {
+    tp = "skeletalhorror",
     x = 3362,
     y = 3503,
     level = 0,
@@ -177,6 +195,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: O BIRDZ A ZANY EN PC"] = {
+    tp = "spirittree",
+    tpinfo = "8",
     x = 2807,
     y = 3191,
     level = 0,
@@ -191,6 +211,7 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: OR ZINC FUMES WARD"] = {
+    tp = "watchtower",
     x = 2588,
     y = 9489,
     level = 0,
@@ -205,6 +226,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: PROFS LOSE WRONG PIE"] = {
+    tp = "travellersnecklace",
+    tpinfo = "1",
     x = 3103,
     y = 3155,
     level = 0,
@@ -213,6 +236,7 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: RED ART TANS"] = {
+    tp = "portsarimlode",
     x = 3033,
     y = 3190,
     level = 0,
@@ -227,6 +251,8 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: SEQUIN DIRGE"] = {
+    tp = "lotd",
+    tpinfo = "1",
     x1 = 2499,
     y1 = 3861,
     x2 = 2502,
@@ -264,6 +290,8 @@ local clues = {
   ["14 degrees 54 minutes north 09 degrees 13 minutes east"] = {},
   ["22 degrees 30 minutes north 03 degrees 01 minutes east"] = {},
   ["00 degrees 00 minutes north 07 degrees 13 minutes west"] = {
+    tp = "tirannwnquiver",
+    tpinfo = "3",
     x = 2209,
     y = 3161,
     level = 0,
@@ -282,6 +310,8 @@ local clues = {
     },
   },
   ["01 degrees 24 minutes north 08 degrees 05 minutes west"] = {
+    tp = "tirannwnquiver",
+    tpinfo = "6",
     x = 2181,
     y = 3206,
     level = 0,
@@ -303,6 +333,8 @@ local clues = {
     },
   },
   ["02 degrees 33 minutes north 28 degrees 45 minutes east"] = {
+    tp = "ringofduelling",
+    tpinfo = "1",
     x = 3360,
     y = 3243,
     level = 0,
@@ -319,6 +351,8 @@ local clues = {
     },
   },
   ["03 degrees 03 minutes south 05 degrees 03 minutes east"] = {
+    tp = "globetrotter",
+    tpinfo = "4",
     x = 2602,
     y = 3063,
     level = 0,
@@ -341,6 +375,7 @@ local clues = {
     },
   },
   ["03 degrees 39 minutes south 13 degrees 58 minutes east"] = {
+    tp = "wickedhood",
     x = 2887,
     y = 3044,
     level = 0,
@@ -354,6 +389,8 @@ local clues = {
     },
   },
   ["03 degrees 45 minutes south 22 degrees 45 minutes east"] = {
+    tp = "enlightenedamulet",
+    tpinfo = "3",
     x = 3168,
     y = 3041,
     level = 0,
@@ -372,6 +409,8 @@ local clues = {
     },
   },
   ["04 degrees 03 minutes south 03 degrees 11 minutes east"] = {
+    tp = "globetrotter",
+    tpinfo = "4",
     x = 2542,
     y = 3031,
     level = 0,
@@ -397,6 +436,8 @@ local clues = {
     },
   },
   ["04 degrees 05 minutes south 04 degrees 24 minutes east"] = {
+    tp = "fairyring",
+    tpinfo = "AKS",
     x = 2581,
     y = 3030,
     level = 0,
@@ -425,6 +466,8 @@ local clues = {
     },
   },
   ["04 degrees 16 minutes south 16 degrees 16 minutes east"] = {
+    tp = "davebook",
+    tpinfo = "2",
     x = 2961,
     y = 3024,
     level = 0,
@@ -447,6 +490,8 @@ local clues = {
     },
   },
   ["04 degrees 41 minutes north 03 degrees 09 minutes west"] = {
+    tp = "questcape",
+    tpinfo = "0",
     x = 2339,
     y = 3311,
     level = 0,
@@ -478,6 +523,8 @@ local clues = {
     },
   },
   ["05 degrees 37 minutes north 31 degrees 15 minutes east"] = {
+    tp = "fairyring",
+    tpinfo = "CKS",
     x = 3440,
     y = 3341,
     level = 0,
@@ -498,6 +545,8 @@ local clues = {
     },
   },
   ["05 degrees 50 minutes south 10 degrees 05 minutes east"] = {
+    tp = "fairyring",
+    tpinfo = "CKR",
     x = 2763,
     y = 2974,
     level = 0,
@@ -525,6 +574,8 @@ local clues = {
     },
   },
   ["06 degrees 00 minutes south 21 degrees 48 minutes east"] = {
+    tp = "globetrotter",
+    tpinfo = "2",
     x = 3138,
     y = 2969,
     level = 0,
@@ -540,6 +591,8 @@ local clues = {
     },
   },
   ["06 degrees 11 minutes south 15 degrees 07 minutes east"] = {
+    tp = "gote",
+    tpinfo = "1",
     x = 2924,
     y = 2963,
     level = 0,
@@ -554,6 +607,7 @@ local clues = {
     },
   },
   ["07 degrees 22 minutes north 14 degrees 15 minutes east"] = {
+    tp = "taverley",
     x = 2896,
     y = 3397,
     level = 0,
@@ -567,6 +621,8 @@ local clues = {
     },
   },
   ["07 degrees 41 minutes north 06 degrees 00 minutes east"] = {
+    tp = "skillsnecklace",
+    tpinfo = "1",
     x = 2632,
     y = 3407,
     level = 0,
@@ -580,6 +636,7 @@ local clues = {
     },
   },
   ["07 degrees 43 minutes south 12 degrees 26 minutes east"] = {
+    tp = "westernkharazi",
     x = 2838,
     y = 2914,
     level = 0,
@@ -596,6 +653,8 @@ local clues = {
     },
   },
   ["08 degrees 03 minutes north 31 degrees 16 minutes east"] = {
+    tp = "fairyring",
+    tpinfo = "BKR",
     x = 3441,
     y = 3419,
     level = 0,
@@ -610,6 +669,7 @@ local clues = {
     },
   },
   ["08 degrees 05 minutes south 15 degrees 56 minutes east"] = {
+    tp = "amuletofnature",
     x = 2950,
     y = 2902,
     level = 0,
@@ -620,6 +680,7 @@ local clues = {
     },
   },
   ["08 degrees 26 minutes south 10 degrees 28 minutes east"] = {
+    tp = "westernkharazi",
     x = 2775,
     y = 2891,
     level = 0,
@@ -634,6 +695,7 @@ local clues = {
     },
   },
   ["09 degrees 22 minutes north 02 degrees 24 minutes west"] = {
+    tp = "eaglespeaklode",
     x = 2363,
     y = 3461,
     level = 0,
@@ -649,6 +711,7 @@ local clues = {
   ["12 degrees 48 minutes north 20 degrees 20 minutes east"] = {},
   ["13 degrees 46 minutes north 21 degrees 01 minutes east"] = {},
   ["15 degrees 48 minutes north 13 degrees 52 minutes east"] = {
+    tp = "trollheim",
     x = 2884,
     y = 3667,
     level = 0,
@@ -659,6 +722,7 @@ local clues = {
     },
   },
   ["16 degrees 20 minutes north 12 degrees 45 minutes east"] = {
+    tp = "trollheimfarm",
     x = 2848,
     y = 3684,
     level = 0,
@@ -684,6 +748,8 @@ local clues = {
   ["16 degrees 30 minutes north 16 degrees 28 minutes east"] = {},
   ["16 degrees 35 minutes north 27 degrees 01 minutes east"] = {},
   ["17 degrees 50 minutes north 08 degrees 30 minutes east"] = {
+    tp = "fairyring",
+    tpinfo = "DKS",
     x = 2712,
     y = 3732,
     level = 0,
@@ -700,6 +766,7 @@ local clues = {
   },
   ["18 degrees 03 minutes north 25 degrees 16 minutes east"] = {},
   ["18 degrees 22 minutes north 16 degrees 33 minutes east"] = {
+    tp = "dareeyak",
     x = 2970,
     y = 3749,
     level = 0,
@@ -721,10 +788,32 @@ local clues = {
   ["19 degrees 43 minutes north 25 degrees 07 minutes east"] = {},
   ["20 degrees 05 minutes north 21 degrees 52 minutes east"] = {},
   ["20 degrees 07 minutes north 18 degrees 33 minutes east"] = {},
-  ["20 degrees 33 minutes north 15 degrees 48 minutes east"] = {},
+  ["20 degrees 33 minutes north 15 degrees 48 minutes east"] = {
+    tp = "obelisk",
+    tpinfo = "5",
+    x = 2946,
+    y = 3819,
+    level = 0,
+    radius = 2,
+    indicators = {
+      { type = "line", col = blue, x1 = 2980, y1 = 3863, x2 = 2980, y2 = 3853, h1 = 2041, h2 = 2153 },
+      { type = "line", col = grey, x1 = 2980, y1 = 3853, x2 = 2980, y2 = 3849, h1 = 2153, h2 = 2033 },
+      { type = "line", col = blue, x1 = 2980, y1 = 3849, x2 = 2980, y2 = 3839, h1 = 2033, h2 = 897 },
+      { type = "line", col = yellow, x1 = 2980, y1 = 3839, x2 = 2970, y2 = 3829, h1 = 897, h2 = 2361 },
+      { type = "line", col = grey, x1 = 2970, y1 = 3829, x2 = 2964, y2 = 3823, h1 = 2361, h2 = 3521 },
+      { type = "line", col = grey, x1 = 2964, y1 = 3823, x2 = 2959, y2 = 3818, h1 = 3521, h2 = 4017 },
+      { type = "line", col = grey, x1 = 2959, y1 = 3818, x2 = 2955, y2 = 3818, h1 = 4017, h2 = 4049 },
+      { type = "line", col = grey, x1 = 2955, y1 = 3818, x2 = 2952, y2 = 3815, h1 = 4049, h2 = 4193 },
+      { type = "line", col = grey, x1 = 2952, y1 = 3815, x2 = 2950, y2 = 3815, h1 = 4193, h2 = 4201 },
+      { type = "line", col = grey, x1 = 2950, y1 = 3815, x2 = 2947, y2 = 3818, h1 = 4201, h2 = 4145 },
+      { type = "arrow", x = 2946, y = 3819, h = 5301 },
+      { type = "dig", x = 2946, y = 3819, h = 5701 },
+    },
+  },
   ["21 degrees 24 minutes north 17 degrees 54 minutes east"] = {},
   ["22 degrees 35 minutes north 19 degrees 18 minutes east"] = {},
   ["22 degrees 45 minutes north 26 degrees 33 minutes east"] = {
+    tp = "annakarl",
     x = 3290,
     y = 3889,
     level = 0,
@@ -783,6 +872,8 @@ local clues = {
   ["46 is my number. My body is the colour of burnt orange and crawls among those with eight. Three mouths I have, yet I cannot eat. My blinking blue eye hides my grave."] = {},
   ["'A bag belt only?', he asked his balding brothers."] = {},
   ["A great view: watch the rapidly drying hides get splashed. Check the box you are sitting on."] = {
+    tp = "lotd",
+    tpinfo = "4",
     x = 2523,
     y = 3493,
     level = 1,
@@ -793,6 +884,8 @@ local clues = {
     },
   },
   ["A strange little man who sells armour only to those who've proven themselves to be unafraid of dragons."] = {
+    tp = "glory",
+    tpinfo = "1",
     x = 3068,
     y = 3516,
     level = 0,
@@ -806,6 +899,8 @@ local clues = {
     },
   },
   ["Aggie I see. Lonely and southern I feel. I am neither inside nor outside the house, yet no home would be complete without me. The treasure lies beneath me!"] = {
+    tp = "glory",
+    tpinfo = "3",
     x = 3083,
     y = 3257,
     level = 0,
@@ -816,6 +911,8 @@ local clues = {
     },
   },
   ["And so on, and so on, and so on. Walking from the land of many unimportant things leads to a choice of paths."] = {
+    tp = "lyre",
+    tpinfo = "6",
     x = 2591,
     y = 3879,
     level = 0,
@@ -826,6 +923,8 @@ local clues = {
     },
   },
   ["As you desert this town, keep an eye out for a set of spines that could ruin nearby rugs: dig carefully around the greenery."] = {
+    tp = "desertamulet",
+    tpinfo = "1",
     x = 3396,
     y = 2918,
     level = 0,
@@ -843,6 +942,7 @@ local clues = {
     },
   },
   ["Citric cellar."] = {
+    tp = "grandseedpod",
     x1 = 2489,
     y1 = 3487,
     x2 = 2493,
@@ -858,6 +958,8 @@ local clues = {
     },
   },
   ["Come to the evil ledge, Yew know yew want to. Try not to get stung."] = {
+    tp = "slayercape",
+    tpinfo = "01",
     x = 3089,
     y = 3468,
     level = 0,
@@ -871,6 +973,7 @@ local clues = {
     },
   },
   ["Covered in shadows, the centre of the circle is where you will find the answer."] = {
+    tp = "kharyrll",
     x = 3488,
     y = 3287,
     level = 0,
@@ -892,6 +995,7 @@ local clues = {
     },
   },
   ["Four blades I have, yet draw no blood; Still I turn my prey to powder. If you are brave, come search my roof; It is there my blades are louder."] = {
+    tp = "lumbridge",
     x = 3166,
     y = 3309,
     level = 2,
@@ -913,6 +1017,8 @@ local clues = {
     },
   },
   ["Generally speaking, his nose was very bent."] = {
+    tp = "archaeology",
+    tpinfo = "03",
     x1 = 2954,
     y1 = 3512,
     x2 = 2960,
@@ -923,6 +1029,8 @@ local clues = {
     },
   },
   ["His head might be hollow, but the crates nearby are filled with surprises."] = {
+    tp = "desertamulet",
+    tpinfo = "2",
     x = 3478,
     y = 3091,
     level = 0,
@@ -932,6 +1040,7 @@ local clues = {
     },
   },
   ["I am a token of the greatest love. I have no beginning or end. My eye is red, I can fit like a glove. Go to the place where it's money they lend, And dig by the gate to be my friend."] = {
+    tp = "varrock",
     x = 3191,
     y = 9825,
     level = 0,
@@ -951,6 +1060,8 @@ local clues = {
     },
   },
   ["I am head of the abbey with a cold breeze from the west."] = {
+    tp = "combatbracelet",
+    tpinfo = "3",
     x = 3058,
     y = 3484,
     level = 0,
@@ -961,6 +1072,8 @@ local clues = {
     },
   },
   ["I'm sure they will let ya buy some things here, as long as you are in good 'ealth"] = {
+    tp = "crystalseed",
+    tpinfo = "1",
     x = 2340,
     y = 3187,
     level = 0,
@@ -972,6 +1085,8 @@ local clues = {
     },
   },
   ["Identify the back of this over-acting brother. (He's a long way from home.)"] = {
+    tp = "leelasfavour",
+    tpinfo = "4",
     x = 3132,
     y = 2802,
     level = 0,
@@ -991,6 +1106,8 @@ local clues = {
     },
   },
   ["If you didn't want to be here and in danger, you should lever things well enough alone."] = {
+    tp = "slayercape",
+    tpinfo = "01",
     x = 3154,
     y = 3924,
     level = 0,
@@ -1003,6 +1120,8 @@ local clues = {
     },
   },
   ["If you look closely enough, it seems that the archers have lost more than their needles."] = {
+    tp = "combatbracelet",
+    tpinfo = "4",
     x = 2672,
     y = 3415,
     level = 0,
@@ -1016,6 +1135,8 @@ local clues = {
   },
   ["I lie lonely and forgotten in mid wilderness, where the dead rise from their beds. Feel free to quarrel and wind me up, and dig while you shoot their heads."] = {},
   ["It seems to have reached the end of the line, and it's still empty."] = {
+    tp = "dgcape",
+    tpinfo = "2",
     x = 3041,
     y = 9820,
     level = 0,
@@ -1032,6 +1153,8 @@ local clues = {
     },
   },
   ["Mine was the strangest birth under the sun. I left the crimson sack, yet life had not begun. Entered the world, and yet was seen by none."] = {
+    tp = "dgcape",
+    tpinfo = "4",
     x = 2832,
     y = 9586,
     level = 0,
@@ -1045,6 +1168,8 @@ local clues = {
     },
   },
   ["Must be full of railings."] = {
+    tp = "lotd",
+    tpinfo = "4",
     x = 2576,
     y = 3464,
     level = 0,
@@ -1054,6 +1179,8 @@ local clues = {
     }
   },
   ["My giant guardians below the market streets would be fans of rock and roll, if only they could grab hold of it. Dig near my purple smoke!"] = {
+    tp = "dgcape",
+    tpinfo = "02",
     x = 3161,
     y = 9905,
     level = 0,
@@ -1070,6 +1197,8 @@ local clues = {
     },
   },
   ["My home is grey, and made of stone; A castle with a search for a meal. Hidden in some drawers I am, across from a wooden wheel."] = {
+    tp = "ringofrespawn",
+    tpinfo = "1",
     x = 3213,
     y = 3216,
     level = 1,
@@ -1086,6 +1215,7 @@ local clues = {
     },
   },
   ["My name is like a tree, yet it is spelt with a 'g', come see the fur which is right near me."] = {
+    tp = "varrock",
     x = 3221,
     y = 3436,
     level = 0,
@@ -1096,6 +1226,7 @@ local clues = {
     },
   },
   ["My name's a tirade, fishing is my trade, by the docks is where my fortune is made."] = {
+    tp = "portsarimlode",
     x = 3014,
     y = 3225,
     level = 0,
@@ -1105,6 +1236,8 @@ local clues = {
     },
   },
   ["Navigating to this crate will be a trial."] = {
+    tp = "lyre",
+    tpinfo = "7",
     x = 2648,
     y = 3662,
     level = 0,
@@ -1119,6 +1252,8 @@ local clues = {
     },
   },
   ["Often sought out by scholars of histories past, find me where words of wisdom speak volumes."] = {
+    tp = "digsitependant",
+    tpinfo = "3",
     x1 = 3351,
     y1 = 3342,
     x2 = 3359,
@@ -1130,6 +1265,8 @@ local clues = {
     },
   },
   ["Probably filled with books on magic."] = {
+    tp = "travellersnecklace",
+    tpinfo = "1",
     x1 = 3094,
     y1 = 3152,
     x2 = 3095,
@@ -1140,6 +1277,8 @@ local clues = {
     },
   },
   ["Read 'How to Breed Scorpions' By O.W. Thathurt."] = {
+    tp = "archaeology",
+    tpinfo = "6",
     x = 2702,
     y = 3408,
     level = 1,
@@ -1155,6 +1294,8 @@ local clues = {
     },
   },
   ["'Small shoe.' Often found with rod on mushroom."] = {
+    tp = "spirittree",
+    tpinfo = "2",
     x = 2470,
     y = 3437,
     level = 0,
@@ -1163,6 +1304,8 @@ local clues = {
     },
   },
   ["Snah? I feel all confused, like one of those cakes."] = {
+    tp = "ringofrespawn",
+    tpinfo = "1",
     x = 3219,
     y = 3224,
     level = 0,
@@ -1171,6 +1314,7 @@ local clues = {
     },
   },
   ["Surprising? I bet he is..."] = {
+    tp = "varrock",
     x = 3204,
     y = 3472,
     level = 0,
@@ -1186,6 +1330,8 @@ local clues = {
     },
   },
   ["The beasts to my east snap claws and tails, The rest to my west can slide and eat fish. The force to my north will jump and they'll wail, Come dig by my fire and make a wish."] = {
+    tp = "globetrotter",
+    tpinfo = "3",
     x = 2598,
     y = 3267,
     level = 0,
@@ -1198,6 +1344,8 @@ local clues = {
     },
   },
   ["The cheapest water for miles around, but they react badly to religious icons."] = {
+    tp = "globetrotter",
+    tpinfo = "2",
     x = 3178,
     y = 2987,
     level = 0,
@@ -1210,6 +1358,8 @@ local clues = {
     },
   },
   ["There is no 'worthier' lord."] = {
+    tp = "crystalseed",
+    tpinfo = "7",
     x = 2186,
     y = 3284,
     level = 1,
@@ -1222,6 +1372,8 @@ local clues = {
     },
   },
   ["This aviator is at the peak of his profession"] = {
+    tp = "gote",
+    tpinfo = "1",
     x = 2850,
     y = 3493,
     level = 0,
@@ -1236,6 +1388,7 @@ local clues = {
     },
   },
   ["This village has a problem with cartloads of the undead. Try checking the bookcase to find an answer."] = {
+    tp = "karamjagloves",
     x = 2834,
     y = 2992,
     level = 0,
@@ -1249,6 +1402,8 @@ local clues = {
     },
   },
   ["'Throat mage seeks companionship. Seek answers inside my furniture if interested.'"] = {
+    tp = "fairyring",
+    tpinfo = "DJP",
     x = 2666,
     y = 3238,
     level = 1,
@@ -1264,6 +1419,8 @@ local clues = {
     },
   },
   ["Try not to let yourself be dazzled when you search these drawers."] = {
+    tp = "davebook",
+    tpinfo = "4",
     x = 2561,
     y = 3323,
     level = 0,
@@ -1285,6 +1442,8 @@ local clues = {
     },
   },
   ["When no weapons are at hand, then is the time to reflect. In Saradomin's name, redemption draws closer."] = {
+    tp = "spirittree",
+    tpinfo = "6",
     x = 2818,
     y = 3351,
     level = 0,
@@ -1298,6 +1457,7 @@ local clues = {
     },
   },
   ["When you get tired of fighting, go deep, deep down until you need an antidote."] = {
+    tp = "watchtower",
     x = 2576,
     y = 9583,
     level = 0,
@@ -1328,6 +1488,8 @@ local clues = {
     },
   },
   ["You can cook food on me, but don't cook any foodles - that would just be wrong."] = {
+    tp = "gote",
+    tpinfo = "1",
     x = 2969,
     y = 2975,
     level = 0,
@@ -1338,6 +1500,8 @@ local clues = {
     },
   },
   ["You don't need to go hopping mad - or take steps - to get to this treasure: just be totally shellfish."] = {
+    tp = "gamesnecklace",
+    tpinfo = "2",
     x = 2519,
     y = 3594,
     level = 0,
@@ -1352,6 +1516,7 @@ local clues = {
     },
   },
   ["You have all of the elements available to solve this clue. Fortunately you do not have to go as far as to stand in a draft."] = {
+    tp = "camelot",
     x = 2723,
     y = 9891,
     level = 0,
@@ -1373,6 +1538,8 @@ local clues = {
     },
   },
   ["You will need to under-cook to solve this one."] = {
+    tp = "ringofrespawn",
+    tpinfo = "1",
     x = 3219,
     y = 9617,
     level = 0,
@@ -1393,6 +1560,8 @@ local clues = {
     },
   },
   ["You will need to wash the old ash off your spade when you dig here, but the only water nearby is stagnant."] = {
+    tp = "dgcape",
+    tpinfo = "8",
     x = 2134,
     y = 5163,
     level = 0,
@@ -1451,6 +1620,8 @@ local clues = {
   ["Twirl on the bridge by Barbarian Village"] = {},
   ["Yawn in the Castle Wars lobby"] = {},
   ["Blow a kiss between the tables in Shilo Village bank"] = {
+    tp = "slayercape",
+    tpinfo = "5",
     x = 2852,
     y = 2953,
     level = 0,
@@ -1465,6 +1636,8 @@ local clues = {
     },
   },
   ["Blow a raspberry in the Fishing Guild bank"] = {
+    tp = "skillsnecklace",
+    tpinfo = "1",
     x = 2586,
     y = 3422,
     level = 0,
@@ -1478,6 +1651,8 @@ local clues = {
     },
   },
   ["Bow or curtsy at the top of the Lighthouse"] = {
+    tp = "globetrotter",
+    tpinfo = "5",
     x1 = 2504,
     y1 = 3636,
     x2 = 2513,
@@ -1491,6 +1666,8 @@ local clues = {
     },
   },
   ["Dance at the cat-doored pyramid in Sophanem"] = {
+    tp = "sotg",
+    tpinfo = "1",
     x1 = 3292,
     y1 = 2781,
     x2 = 3297,
@@ -1502,6 +1679,7 @@ local clues = {
     },
   },
   ["Laugh at Jokul's tent in the Mountain Camp"] = {
+    tp = "mountaincamp",
     x1 = 2790,
     y1 = 3667,
     x2 = 2797,
@@ -1512,6 +1690,8 @@ local clues = {
     },
   },
   ["Panic by the pilot on White Wolf Mountain"] = {
+    tp = "gote",
+    tpinfo = "1",
     x1 = 2842,
     y1 = 3486,
     x2 = 2853,
@@ -1526,6 +1706,8 @@ local clues = {
     },
   },
   ["Panic in the heart of the Haunted Woods"] = {
+    tp = "fairyring",
+    tpinfo = "ALQ",
     x1 = 3611,
     y1 = 3483,
     x2 = 3621,
@@ -1538,6 +1720,8 @@ local clues = {
     },
   },
   ["Salute in the banana plantation"] = {
+    tp = "glory",
+    tpinfo = "2",
     x1 = 2909,
     y1 = 3155,
     x2 = 2932,
@@ -1548,6 +1732,8 @@ local clues = {
     },
   },
   ["Shrug in the Zamorak temple"] = {
+    tp = "obelisk",
+    tpinfo = "2",
     x1 = 3236,
     y1 = 3605,
     x2 = 3242,
@@ -1563,6 +1749,8 @@ local clues = {
     },
   },
   ["Yawn near the Wilderness Bandit camp obelisk"] = {
+    tp = "obelisk",
+    tpinfo = "3",
     x = 3035,
     y = 3732,
     level = 0,

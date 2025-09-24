@@ -6,6 +6,9 @@ local clues = {
   -- hard
   dwf = {
     text = "[map: search a crate in the centre of the dark warriors' fortress]",
+    tp = "dareeyak",
+    x = 3026,
+    y = 3629,
     level = 0,
     indicators = {
       { type = "line", col = grey, x1 = 2968, y1 = 3696, x2 = 2958, y2 = 3693, h1 = 865, h2 = 1137 },
@@ -37,6 +40,8 @@ local clues = {
   },
   fortforinthry = {
     text = "[map: search a crate outside the gate of fort forinthry]",
+    tp = "slayercape",
+    tpinfo = "9",
     x = 3312,
     y = 3528,
     level = 0,
@@ -51,6 +56,8 @@ local clues = {
   },
   legendsguild = {
     text = "[map: dig near some benches outside the legends' guild]",
+    tp = "questcape",
+    tpinfo = "7",
     x = 2722,
     y = 3338,
     level = 0,
@@ -63,6 +70,8 @@ local clues = {
   },
   observatory = {
     text = "[map: search a crate in a house northeast of the observatory]",
+    tp = "davebook",
+    tpinfo = "1",
     x = 2457,
     y = 3182,
     level = 0,
@@ -79,6 +88,8 @@ local clues = {
   },
   threevolcanoes = {
     text = "[map: dig between three small volcanoes in the wilderness]",
+    tp = "slayercape",
+    tpinfo = "1",
     x = 3021,
     y = 3912,
     level = 0,
@@ -99,6 +110,8 @@ local clues = {
   },
   westardougne = {
     text = "[map: dig in a house in west ardougne]",
+    tp = "davebook",
+    tpinfo = "4",
     x = 2488,
     y = 3308,
     level = 0,
@@ -116,6 +129,7 @@ local clues = {
   },
   yanillecorner = {
     text = "[map: dig behind a house in the southeast corner of yanille]",
+    tp = "watchtower",
     x = 2616,
     y = 3077,
     level = 0,

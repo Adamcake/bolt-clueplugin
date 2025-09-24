@@ -1,7 +1,7 @@
 return {get = function(bolt)
   local points = require("compass.points")
   local checkintervalmicros = 100000 -- tenth of a second
-  local surfacemaybe, maybewidth, maybeheight = bolt.createsurfacefrompng("images.maybe")
+  local markeractive = bolt.images.markeractive
 
   local anglediffminimum = 0.2 -- 0.2 radians = about 11 degrees. no particular reason, just a small but significant angle
   local radians360 = math.pi * 2
@@ -91,7 +91,7 @@ return {get = function(bolt)
             local scale = 0.75
             local imgradius = 16 * scale
             local imgsize = 32 * scale
-            surfacemaybe:drawtoscreen(0, 0, maybewidth, maybeheight, px - imgradius, py - imgradius, imgsize, imgsize)
+            markeractive.surface:drawtoscreen(0, 0, markeractive.w, markeractive.h, px - imgradius, py - imgradius, imgsize, imgsize)
           end
         end
       end
