@@ -42,6 +42,8 @@ local m = map.create(mx / tilefactor, mz / tilefactor, 0)
 local function setobject (obj)
   lastvalid = bolt.time()
   currentobject = obj
+  m.tp = nil
+  m.tpinfo = nil
   if obj.x and obj.y then
     m:update(obj.x, obj.y, obj.level)
   end
