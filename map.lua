@@ -94,7 +94,7 @@ return {get = function(bolt)
 
     local fullheight = map.h + titleheight
     local padding = 2
-    local margin = 4
+    local margin = 8
     local chardrawnheight = 48
     local chardrawnwidth = charwidth * chardrawnheight / letters.h -- assumes digits.h and letters.h are the same
     local infoiconsize = 64
@@ -106,8 +106,8 @@ return {get = function(bolt)
     if map.tpinfo then infoboxinnerwidth = infoboxinnerwidth + ((chardrawnwidth + 1) * #map.tpinfo) - 1 end
     if infoboxinnerwidth > 0 then
       local doublepadding = padding * 2
-      whitepixel:settint(0.25, 0.25, 0.25, 0.25)
-      whitepixel:setalpha(0.75)
+      whitepixel:settint(0.1, 0.1, 0.1)
+      whitepixel:setalpha(0.9)
       whitepixel:drawtowindow(window, 0, 0, 1, 1, borderwidth + margin, fullheight - (chardrawnheight + borderwidth + doublepadding + margin), infoboxinnerwidth + doublepadding, infoboxinnerheight + doublepadding)
     end
 
