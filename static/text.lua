@@ -148,13 +148,20 @@ local clues = {
     },
   },
   ["This anagram reveals who to speak to next: HE DO POSE. IT IS CULTRRL, MK?"] = {
-    tp = "lotd",
-    tpinfo = "3",
+    tp = "gote",
+    tpinfo = "2",
     x = 2904,
     y = 10207,
     level = 0,
-    radius = 1,
     indicators = {
+      { type = "arrow", x = 2176.5, y = 5663.5, h = 2365 },
+      -- travel through tunnel
+      { type = "line", col = grey, x1 = 2939, y1 = 10198, x2 = 2936, y2 = 10201, h1 = 1017, h2 = 969 },
+      { type = "line", col = yellow, x1 = 2936, y1 = 10201, x2 = 2926, y2 = 10199, h1 = 969, h2 = 1057 },
+      { type = "line", col = blue, x1 = 2926, y1 = 10199, x2 = 2916, y2 = 10199, h1 = 1057, h2 = 1081 },
+      { type = "line", col = blue, x1 = 2916, y1 = 10199, x2 = 2906, y2 = 10199, h1 = 1081, h2 = 1049 },
+      { type = "line", col = grey, x1 = 2906, y1 = 10199, x2 = 2906, y2 = 10204, h1 = 1049, h2 = 1081 },
+      { type = "line", col = grey, x1 = 2906, y1 = 10204, x2 = 2904, y2 = 10206, h1 = 1081, h2 = 1081 },
       { type = "model", vertices = 6309, x1 = 226, y1 = 167, z1 = -59, h = 1000, anim = true, speech = true },
     },
   },
