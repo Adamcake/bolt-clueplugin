@@ -536,8 +536,8 @@ local clues = {
       { type = "arrow", x = 3443.5, y = 3457.5, h = 1889 },
       -- fast-travel via gate
       { type = "line", col = yellow, x1 = 3431, y1 = 3328, x2 = 3440, y2 = 3327, h1 = 385, h2 = 377 },
-      { type = "line", col = grey, x1 = 3440, y1 = 3327, x2 = 3441, y2 = 3329, h1 = 249, h2 = 249 },
-      { type = "line", col = blue, x1 = 3440, y1 = 3331, x2 = 3435, y2 = 3336, h1 = 377, h2 = 185 },
+      { type = "line", col = grey, x1 = 3440, y1 = 3327, x2 = 3441, y2 = 3329, h1 = 377, h2 = 249 },
+      { type = "line", col = blue, x1 = 3440, y1 = 3331, x2 = 3435, y2 = 3336, h1 = 249, h2 = 185 },
       { type = "line", col = grey, x1 = 3435, y1 = 3336, x2 = 3439, y2 = 3341, h1 = 185, h2 = 193 },
       { type = "arrow", x = 3440.5, y = 3329, h = 1449 },
       { type = "arrow", x = 3440, y = 3341, h = 1393 },
