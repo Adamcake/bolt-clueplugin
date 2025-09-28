@@ -39,6 +39,7 @@ return {get = function(bolt)
   local maxloadperframe = 20000 -- cap on how long can be spent loading images per frame, in microseconds (= 0.02 seconds)
 
   local redraw = function (map)
+    map.pendingredraw = false
     local window = map.window
     local level = map.level
     local viewscale = viewscales[viewscaleindex]
@@ -210,13 +211,10 @@ return {get = function(bolt)
         chunks[name] = nil
       end
     end
-
-    map.pendingredraw = false
   end
 
   local onswapbuffers = function (map)
     if map.pendingredraw then
-      map.pendingredraw = false
       map:redraw()
     end
   end
