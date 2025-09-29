@@ -871,7 +871,25 @@ local clues = {
     },
   },
   ["24 degrees 26 minutes north 26 degrees 24 minutes east"] = {},
-  ["24 degrees 56 minutes north 22 degrees 28 minutes east"] = {},
+  ["24 degrees 56 minutes north 22 degrees 28 minutes east"] = {
+    tp = "slayercape",
+    tpinfo = "01",
+    x = 3159,
+    y = 3959,
+    level = 0,
+    radius = 2,
+    indicators = {
+      { type = "arrow", x = 3089.75, y = 3474, h = 1965 },
+      -- travel via lever
+      { type = "line", col = grey, x1 = 3154, y1 = 3924, x2 = 3158, y2 = 3928, h1 = 1745, h2 = 1673 },
+      { type = "line", col = yellow, x1 = 3158, y1 = 3928, x2 = 3158, y2 = 3938, h1 = 1673, h2 = 1633 },
+      { type = "line", col = blue, x1 = 3158, y1 = 3938, x2 = 3158, y2 = 3948, h1 = 1633, h2 = 1625 },
+      { type = "line", col = grey, x1 = 3158, y1 = 3948, x2 = 3158, y2 = 3950, h1 = 1625, h2 = 1625 },
+      { type = "line", col = blue, x1 = 3158, y1 = 3950, x2 = 3158, y2 = 3960, h1 = 1625, h2 = 1457 },
+      { type = "arrow", x = 3159, y = 3959, h = 2733 },
+      { type = "dig", x = 3159, y = 3959, h = 3133 },
+    },
+  },
   ["24 degrees 58 minutes north 18 degrees 43 minutes east"] = {
     tp = "slayercape",
     tpinfo = "1",
