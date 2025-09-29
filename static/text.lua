@@ -312,8 +312,8 @@ local clues = {
       { type = "line", col = blue, x1 = 2199, y1 = 3178, x2 = 2199, y2 = 3169, h1 = 1089, h2 = 849 },
       { type = "line", col = yellow, x1 = 2202, y1 = 3169, x2 = 2208, y2 = 3160, h1 = 921, h2 = 969 },
       { type = "arrow", x = 2201, y = 3169, h = 1901 },
-      { type = "arrow", x = 2209, y = 3161, h = 1141 },
-      { type = "dig", x = 2209, y = 3161, h = 1541 },
+      { type = "arrow", x = 2209, y = 3161, h = 2141 },
+      { type = "dig", x = 2209, y = 3161, h = 2541 },
     },
   },
   ["01 degrees 24 minutes north 08 degrees 05 minutes west"] = {
