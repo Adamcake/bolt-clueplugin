@@ -833,7 +833,22 @@ local clues = {
     },
   },
   ["19 degrees 43 minutes north 25 degrees 07 minutes east"] = {},
-  ["20 degrees 05 minutes north 21 degrees 52 minutes east"] = {},
+  ["20 degrees 05 minutes north 21 degrees 52 minutes east"] = {
+    tp = "obelisk",
+    tpinfo = "4",
+    x = 3140,
+    y = 3804,
+    level = 0,
+    radius = 2,
+    indicators = {
+      { type = "line", col = blue, x1 = 3108, y1 = 3794, x2 = 3118, y2 = 3794, h1 = 1433, h2 = 1849 },
+      { type = "line", col = yellow, x1 = 3118, y1 = 3794, x2 = 3128, y2 = 3804, h1 = 1849, h2 = 1209 },
+      { type = "line", col = grey, x1 = 3128, y1 = 3804, x2 = 3130, y2 = 3804, h1 = 1209, h2 = 945 },
+      { type = "line", col = blue, x1 = 3130, y1 = 3804, x2 = 3140, y2 = 3804, h1 = 945, h2 = 1673 },
+      { type = "arrow", x = 3140, y = 3804, h = 2853 },
+      { type = "dig", x = 3140, y = 3804, h = 3253 },
+    },
+  },
   ["20 degrees 07 minutes north 18 degrees 33 minutes east"] = {},
   ["20 degrees 33 minutes north 15 degrees 48 minutes east"] = {
     tp = "obelisk",
