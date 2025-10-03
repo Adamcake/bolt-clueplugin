@@ -576,8 +576,8 @@ local clues = {
       { type = "line", col = grey, x1 = 2767, y1 = 2972, x2 = 2764, y2 = 2972, h1 = 2275, h2 = 2275 },
       { type = "line", col = grey, x1 = 2764, y1 = 2972, x2 = 2764, y2 = 2973, h1 = 2275, h2 = 2275 },
       { type = "up", x = 2794, y = 2979, h = 1201 },
-      { type = "arrow", x = 2763, y = 2974, h = 2401 },
-      { type = "dig", x = 2763, y = 2974, h = 2801 },
+      { type = "arrow", x = 2763, y = 2974, h = 3445 },
+      { type = "dig", x = 2763, y = 2974, h = 3845 },
     },
   },
   ["06 degrees 00 minutes south 21 degrees 48 minutes east"] = {
