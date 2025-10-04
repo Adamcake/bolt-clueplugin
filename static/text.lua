@@ -1183,8 +1183,8 @@ local clues = {
     radius = 2,
     indicators = {
       { type = "line", col = grey, x1 = 3212, y1 = 3434, x2 = 3208, y2 = 3430, h1 = 985, h2 = 985 },
-      { type = "line", col = grey, x1 = 3208, y1 = 3430, x2 = 3204, y2 = 3430, h1 = 985, h2 = 985 },
-      { type = "line", col = blue, x1 = 3204, y1 = 3430, x2 = 3194, y2 = 3430, h1 = 985, h2 = 1161 },
+      { type = "line", col = grey, x1 = 3208, y1 = 3430, x2 = 3204, y2 = 3430, h1 = 985, h2 = 1145 },
+      { type = "line", col = blue, x1 = 3204, y1 = 3430, x2 = 3194, y2 = 3430, h1 = 1145, h2 = 1161 },
       { type = "line", col = yellow, x1 = 3194, y1 = 3430, x2 = 3186, y2 = 3433, h1 = 1161, h2 = 1273 },
       { type = "line", col = grey, x1 = 3186, y1 = 3433, x2 = 3188, y2 = 3433, h1 = 1273, h2 = 1273 },
       { type = "arrow", x = 3189, y = 3432.5, h = 1973 },
