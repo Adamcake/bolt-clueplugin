@@ -24,11 +24,8 @@ return {get = function(bolt)
       local verticesperimage = event:verticesperimage()
 
       local function imagetonumbers (this, event, firstvertex)
-        print("entering image to numbers")
         local state = {}
         local statelength = 0
-        local rows = {0, 0, 0, 0, 0}
-        local cols = {0, 0, 0, 0, 0}
         local correctevent = false
 
         for i = firstvertex, event:vertexcount(), verticesperimage do
@@ -38,7 +35,6 @@ return {get = function(bolt)
             local currentx, currenty = event:vertexxy(i)
             local f = decoder.get(event, ax, ay, aw * 4)
             if f~= nil then
-              print("Found " .. f .. " at position " .. i)
               statelength = statelength + 1
               state[statelength] = f 
               -- drawnumber(state[statelength] , currentx-objecthalfsize, currenty-objecthalfsize)
@@ -55,10 +51,6 @@ return {get = function(bolt)
         local state = imagetonumbers(this, event, firstvertex)
         local ax, ay, aw, ah, _, _ = event:vertexatlasdetails(firstvertex)
         if aw == objectsize and ah == objectsize then
-            for j=1, #state,5 do
-              print(state[j] .. " " .. state[j+1] .. " " .. state[j+2] .. " " .. state[j+3] .. " " .. state[j+4])
-            end -- forj
-
             local solution = solver.get(state)
             for index=1, #solution do
               if solution[index] ~= 0 then 
@@ -87,7 +79,6 @@ return {get = function(bolt)
         this.solutionstate = {}
         this.issolved = false
         this.solutionindex = 0
-        this.nextsolvetime = bolt.time() + resolveinterval
         this.solver = nil
       end
 
@@ -107,7 +98,6 @@ return {get = function(bolt)
 
         valid = valid,
         onrender2d = onrender2d,
-        -- solve = solve,
         reset = reset,
       }
       imagetonumbers(object, event, firstvertex)

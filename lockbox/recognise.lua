@@ -12,7 +12,6 @@ local decoder = {
 return {
   get = function (event, ax, ay, width)
     local result = decoder[event:texturedata(ax, ay + 11, width)] 
-    -- print("decode" .. result)
     return result
   end,
 }
