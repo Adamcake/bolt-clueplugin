@@ -37,6 +37,9 @@ return {get = function(bolt)
             if f~= nil then
               statelength = statelength + 1
               state[statelength] = f 
+              if statelength == 25 then 
+                return state
+              end
               -- drawnumber(state[statelength] , currentx-objecthalfsize, currenty-objecthalfsize)
             else 
               print("A tile was not recognised")
@@ -51,19 +54,21 @@ return {get = function(bolt)
         local state = imagetonumbers(this, event, firstvertex)
         local ax, ay, aw, ah, _, _ = event:vertexatlasdetails(firstvertex)
         if aw == objectsize and ah == objectsize then
-            local solution = solver.get(state)
-            for index=1, #solution do
-              if solution[index] ~= 0 then 
+            if state ~= nil then 
+              this.solution = solver.get(state)
+            end
+            if this.solution == nil then return end
+            for index=1, #this.solution do
+              if this.solution[index] ~= 0 then 
                 local x, y = event:vertexxy(firstvertex)
                 local newx = x + ((index-1) % 5 ) * (objectsize + 6) - objecthalfsize
                 local newy = y + math.floor((index-1) / 5 ) * (objectsize + 6 ) - objecthalfsize
-                drawnumber(3 - solution[index], newx , newy)
+                drawnumber(3 - this.solution[index], newx , newy)
               end
             end
           else 
             if bolt.time() - this.lasttime > 1200000 then
               this.isvalid = false
-              this.solver = nil
             end 
         end
       end
@@ -75,11 +80,12 @@ return {get = function(bolt)
       local function reset (this)
         this.state = {}
         this.statelength = 0
-        this.solution = {}
+        this.solution = nil
         this.solutionstate = {}
         this.issolved = false
         this.solutionindex = 0
         this.solver = nil
+        this.lasttime = bolt.time()
       end
 
       local object = {
@@ -87,14 +93,14 @@ return {get = function(bolt)
         nextsolvetime = nil,
         state = {},
         statelength = 0,
-        solution = {},
+        solution = nil,
         solutionindex = 0,
         solvingstate = {},
         issolved = false,
         leftmostx = 0,
         solver = nil,
-        lasttime = nil,
         finished = false,
+        lasttime = bolt.time(),
 
         valid = valid,
         onrender2d = onrender2d,

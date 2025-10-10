@@ -46,6 +46,7 @@ local function solve(A, b)
       local inv = 1
       while (A[row][col] * inv) % modulo ~= 1 do inv = inv + 1 end
       for j = col, N do A[row][j] = (A[row][j] * inv) % modulo end
+      if b[row] == nil then return nil end
       b[row] = (b[row] * inv) % modulo
 
       for r = 1, N do
@@ -69,9 +70,9 @@ local function solve(A, b)
         break
       end
     end
-    if allZero and b[r] % modulo ~= 0 then
-      error("No solution exists")
-    end
+    -- if allZero and b[r] % modulo ~= 0 then
+    --   print("No solution exists")
+    -- end
   end
 
   for i = 1, N do x[i] = b[i] % modulo end
