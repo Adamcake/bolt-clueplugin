@@ -67,7 +67,7 @@ return {get = function(bolt)
               end
             end
           else 
-            if bolt.time() - this.lasttime > 1200000 then
+            if bolt.time() - this.lasttime > 1600000 then
               this.isvalid = false
             end 
         end
