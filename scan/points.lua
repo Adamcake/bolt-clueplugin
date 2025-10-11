@@ -726,9 +726,33 @@ local points = {
     },
     range = 27,
   },
+  lostgrove = {
+    points = {
+      -- these don't seem correct ;(
+      { x = 1951, y = 3235, z = 3291, floor = 2 },
+      { x = 1904, y = 3198, z = 3291, floor = 2 },
+      { x = 1978, y = 3199, z = 3291, floor = 2 },
+      { x = 1951, y = 3191, z = 3291, floor = 2 },
+      { x = 1993, y = 3188, z = 3291, floor = 2 },
+      { x = 1946, y = 3174, z = 3291, floor = 2 },
+      { x = 1902, y = 3168, z = 3291, floor = 2 },
+      { x = 1999, y = 3160, z = 3291, floor = 2 },
+      { x = 1920, y = 3156, z = 3291, floor = 2 },
+      { x = 1949, y = 3138, z = 3291, floor = 2 },
+      { x = 1928, y = 3129, z = 3291, floor = 2 },
+      { x = 1883, y = 3126, z = 3291, floor = 2 },
+      { x = 1997, y = 3131, z = 3291, floor = 2 },
+      { x = 1909, y = 3112, z = 3291, floor = 2 },
+      { x = 2007, y = 3100, z = 3291, floor = 2 },
+      { x = 1950, y = 3054, z = 3291, floor = 2 },
+      { x = 1046, y = 5727, z = 7541, floor = 4 },
+    },
+    range = 14,
+  }
 }
 
 return {get = function (name, time)
+  print("loading points: " .. name)
   local p = points[name]
   if not p then return nil end
 

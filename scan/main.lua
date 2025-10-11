@@ -187,7 +187,7 @@ return {get = function(bolt)
     }
   end
 
-  -- table of a row of pixel data from the sixth letter of the scan clue text. each value is a function which,
+  -- table of the 9th row of pixel data from the sixth letter of the scan clue text. each value is a function which,
   -- when called with f(bolt, render2devent), returns a scan object or nil.
   -- the purpose of this is to optimise text-matching, so that, instead of a large number of if-else cases,
   -- most of the variance is handled by a lookup table, which is O(1). generally, each function queries just enough
@@ -268,7 +268,12 @@ return {get = function(bolt)
       -- check the width of the third letter: r=8 e=14
       local _, _, w, _, _, _ = event:vertexatlasdetails((event:verticesperimage() * 4) + 1)
       if w == 8 then return create(bolt, "dorgeshkaan") end
-      if w == 14 then return create(bolt, "eastdesert") end
+      
+      -- width of 4th letter?
+      local _, _, w4, _, _, _ = event:vertexatlasdetails((event:verticesperimage() * 6) + 1)
+      print(w4)
+      if w4 == 12 then print("lost grove") return create(bolt, "lostgrove") end
+      if w == 14 then print("desert") return create(bolt, "eastdesert") end -- there is a new lost grove clue that also matches this 
       return nil
     end,
     ["\x00\x00\x01\x00\x00\x00\x01\x00\xff\xff\xff\xdd\xff\xff\xff\xdd\xff\xff\xff\x22\xff\xff\xff\x22\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00"] = function (bolt, event)
