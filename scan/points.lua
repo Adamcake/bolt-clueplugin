@@ -726,9 +726,32 @@ local points = {
     },
     range = 27,
   },
+  lostgrove = {
+    points = {
+      { x = 1326, y = 13, z = 5664, floor = 1 }, -- these are in the correct spot
+      { x = 1390, y = 11, z = 5615, floor = 1 },
+      -- the ones below i've tried estimating from the wiki but i have to actually get the spots to confirm their locations
+      { x = 1344, y = 14, z = 5656, floor = 1 },
+      { x = 1309, y = 15, z = 5624, floor = 1 },
+      { x = 1336, y = 12, z = 5608, floor = 1 },
+      { x = 1351, y = 21, z = 5623, floor = 1 },
+      { x = 1376, y = 13, z = 5634, floor = 1 },
+      { x = 1371, y = 11, z = 5670, floor = 1 },
+      { x = 1431, y = 8,  z = 5596, floor = 1 },
+      { x = 1421, y = 8,  z = 5632, floor = 1 },
+      { x = 1423, y = 11, z = 5657, floor = 1 },
+      { x = 1403, y = 13, z = 5695, floor = 1 },
+      { x = 1433, y = 14, z = 5693, floor = 1 },
+      { x = 1370, y = 13, z = 5729, floor = 1 },
+      { x = 1328, y = 13, z = 5693, floor = 1 },
+      { x = 1374, y = 0,  z = 5546, floor = 1 },
+    },
+    range = 14,
+  }
 }
 
 return {get = function (name, time)
+  print("loading points: " .. name)
   local p = points[name]
   if not p then return nil end
 
