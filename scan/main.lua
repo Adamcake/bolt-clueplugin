@@ -187,7 +187,7 @@ return {get = function(bolt)
     }
   end
 
-  -- table of a row of pixel data from the sixth letter of the scan clue text. each value is a function which,
+  -- table of the 9th row of pixel data from the sixth letter of the scan clue text. each value is a function which,
   -- when called with f(bolt, render2devent), returns a scan object or nil.
   -- the purpose of this is to optimise text-matching, so that, instead of a large number of if-else cases,
   -- most of the variance is handled by a lookup table, which is O(1). generally, each function queries just enough
@@ -264,11 +264,16 @@ return {get = function(bolt)
       return create(bolt, "ardougne")
     end,
     ["\xff\xff\xff\x44\xff\xff\xff\x44\xff\xff\xff\xee\xff\xff\xff\xee\xff\xff\xff\x77\xff\xff\xff\x77\xff\xff\xff\x11\xff\xff\xff\x11\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00"] = function (bolt, event)
-      -- 's' => 'Dorge[s]h-Kaan' OR 'The de[s]ert, east of the Elid and north of Nardah'
-      -- check the width of the third letter: r=8 e=14
-      local _, _, w, _, _, _ = event:vertexatlasdetails((event:verticesperimage() * 4) + 1)
-      if w == 8 then return create(bolt, "dorgeshkaan") end
-      if w == 14 then return create(bolt, "eastdesert") end
+      -- 's' => 'Dorge[s]h-Kaan' OR 'The Lo[s]t Grove' OR 'The de[s]ert, east of the Elid and north of Nardah'
+      -- check the width of the ninth letter: K=14 r=8 t=10
+      local _, _, w, _, _, _ = event:vertexatlasdetails((event:verticesperimage() * 16) + 1)
+      if w == 14 then return create(bolt, "dorgeshkaan") end
+      if w == 8 then 
+        local x,y,z = bolt.playerposition():get()
+        print("{ x = " .. math.floor(x/512) .. ", y = " .. math.floor(y / 512) .. ", z = " .. math.floor(z / 512) .. ", floor = 1 },")
+        return create(bolt, "lostgrove")
+        end
+      if w == 10 then return create(bolt, "eastdesert") end
       return nil
     end,
     ["\x00\x00\x01\x00\x00\x00\x01\x00\xff\xff\xff\xdd\xff\xff\xff\xdd\xff\xff\xff\x22\xff\xff\xff\x22\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00"] = function (bolt, event)
